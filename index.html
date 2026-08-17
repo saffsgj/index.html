@@ -16,6 +16,10 @@
   <!-- مكتبة Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- مكتبة Firebase (Realtime Database) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
   <style>
     html, body {
       height: 100vh;
@@ -128,6 +132,12 @@
       </div>
 
       <div class="flex items-center gap-2">
+        <!-- عداد الزيارات في الهيدر (يظهر حصرياً في الصفحة الرئيسية) -->
+        <div id="header-visitor-count" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 shadow-sm transition-all duration-300">
+          <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="header-visitor-num" class="font-bold text-[11px] tracking-wide">...</span>
+        </div>
+
         <!-- زر التكبير الخاص بالصفحات المضمنة -->
         <button id="header-fullscreen-btn" onclick="toggleAppFullscreen()" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 transition-all active:scale-95 shadow-inner">
           <span class="text-[11px] font-bold">تكبير </span>
@@ -301,7 +311,7 @@
       </div>
     </div>
 
-    <!-- ---------- 5. صفحة الكتب (بدون زر التكبير/التصغير) ---------- -->
+    <!-- ---------- 5. صفحة الكتب ---------- -->
     <div id="page-books" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
       <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
         <iframe 
@@ -369,6 +379,23 @@
     </div>
 
     <nav class="flex-1 overflow-y-auto p-4 space-y-5 custom-scrollbar">
+      
+      <!-- 📊 بطاقة عداد الزيارات الحقيقي في القائمة الجانبية -->
+      <div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-slate-900 border border-amber-500/30 flex items-center justify-between shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="text-xs font-extrabold text-slate-100">إجمالي الزيارات</p>
+            <p class="text-[10px] text-amber-400 font-semibold mt-0.5">عدد زوار المنصة الحقيقي</p>
+          </div>
+        </div>
+        <div class="px-3 py-1 rounded-xl bg-slate-950 border border-amber-500/40 text-amber-300 text-xs font-black font-mono shadow-inner" style="direction: ltr;">
+          <span id="sidebar-visitor-num">...</span>
+        </div>
+      </div>
+
       <div>
         <p class="px-2 mb-2 text-[10px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
           <span>📍</span> الأقسام الرئيسية
@@ -581,6 +608,69 @@
   <script>
     lucide.createIcons();
 
+    /* ----- إعدادات قاعدة بيانات Firebase لعداد الزيارات الحقيقي ----- */
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-GqVbJCMhlJQR1lia6P5zLxmNzA8KEgk",
+      authDomain: "ktaab-770af.firebaseapp.com",
+      databaseURL: "https://ktaab-770af-default-rtdb.firebaseio.com",
+      projectId: "ktaab-770af",
+      storageBucket: "ktaab-770af.firebasestorage.app",
+      messagingSenderId: "898561427749",
+      appId: "1:898561427749:web:fe98bf78c6cf8eb46332cc",
+      measurementId: "G-21J1W64L0Z"
+    };
+
+    // تهيئة Firebase والزيارات
+    let visitsRef = null;
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const db = firebase.database();
+      visitsRef = db.ref('visits_total_count');
+
+      // استخدام Transaction لضمان القراءة والزيادة الصحيحة من السيرفر
+      visitsRef.transaction((currentVisits) => {
+        return (currentVisits || 0) + 1;
+      }, (error, committed, snapshot) => {
+        if (error) {
+          console.warn("خطأ في تحديث العداد:", error);
+        }
+      });
+
+      // الاستماع المباشر للتغيرات وعرض القيمة الحقيقية
+      visitsRef.on('value', (snapshot) => {
+        const totalVisits = snapshot.val() || 1;
+        updateVisitorDisplays(totalVisits);
+      }, (error) => {
+        console.warn("خطأ قراءة البيانات من فايربيس:", error);
+      });
+    } catch (e) {
+      console.warn("خطأ تهيئة فايربيس:", e);
+    }
+
+    // دالة تحويل الرقم الطويل إلى صيغة k و M
+    function formatVisitorCount(num) {
+      if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+      }
+      if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+      }
+      return num.toString();
+    }
+
+    // دالة عرض الزيارات
+    function updateVisitorDisplays(count) {
+      const formatted = formatVisitorCount(Number(count));
+      
+      const headerNum = document.getElementById('header-visitor-num');
+      const sidebarNum = document.getElementById('sidebar-visitor-num');
+      
+      if (headerNum) headerNum.textContent = formatted;
+      if (sidebarNum) sidebarNum.textContent = formatted;
+    }
+
     /* ----- منطق فحص قوة واتصال الإنترنت ----- */
     const networkToast = document.getElementById('network-status-toast');
     const networkToastBg = document.getElementById('network-toast-bg');
@@ -718,9 +808,20 @@
         document.getElementById('header-page-subtitle').innerHTML = pageMeta[tabKey].subtitle;
       }
 
+      // التحكم في ظهور عداد الزيارات في الشريط العلوي (الهيدر) فقط في الصفحة الرئيسية
+      const headerVisitorEl = document.getElementById('header-visitor-count');
+      if (headerVisitorEl) {
+        if (tabKey === 'home') {
+          headerVisitorEl.classList.remove('hidden');
+          headerVisitorEl.classList.add('flex');
+        } else {
+          headerVisitorEl.classList.add('hidden');
+          headerVisitorEl.classList.remove('flex');
+        }
+      }
+
       const fullscreenBtn = document.getElementById('header-fullscreen-btn');
       
-      // التعديل هنا: تمت إزالة tabKey === 'books' لمنع ظهور زر التكبير في المكتبة
       if (tabKey === 'chat' || tabKey === 'sections' || tabKey === 'lectures') {
         if (fullscreenBtn) fullscreenBtn.classList.remove('hidden');
       } else {
@@ -833,7 +934,6 @@
       const chatMinimizeBtn = document.getElementById('chat-floating-minimize-btn');
       const sectionsMinimizeBtn = document.getElementById('sections-floating-minimize-btn');
       const lecturesMinimizeBtn = document.getElementById('lectures-floating-minimize-btn');
-      // تمت إزالة زر تصغير المكتبة من هنا أيضاً
 
       if (isAppFullscreen) {
         if(bottomNav) bottomNav.classList.add('hidden');
