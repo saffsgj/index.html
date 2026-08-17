@@ -2,625 +2,858 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ملتقى المنصة العام</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
+  <title>منصة منقذ المهني</title>
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Cairo -->
+  <!-- خط Cairo المتميز -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
           
-  <!-- Lucide Icons -->
+  <!-- مكتبة Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body { font-family: 'Cairo', sans-serif; }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-    
-    @keyframes messageSlide {
-      from { opacity: 0; transform: translateY(8px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    html, body {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      width: 100%;
+      position: fixed;
+      touch-action: manipulation;
     }
-    .msg-animate { animation: messageSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .reply-swipe-anim { transition: transform 0.2s ease-out; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden; 
+    }
     
-    .fade-out { opacity: 0; transform: scale(0.9); transition: all 0.3s ease-out; }
+    /* حركات الخلفية المتحركة */
+    @keyframes floatUp {
+      0% { transform: translateY(100px) scale(0.8) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.3; }
+      80% { opacity: 0.2; }
+      100% { transform: translateY(-150px) scale(1.2) rotate(45deg); opacity: 0; }
+    }
+
+    .animate-float-1 { animation: floatUp 8s infinite linear; }
+    .animate-float-2 { animation: floatUp 12s infinite linear 2s; }
+    .animate-float-3 { animation: floatUp 10s infinite linear 4s; }
+    .animate-float-4 { animation: floatUp 14s infinite linear 1s; }
+    .animate-float-5 { animation: floatUp 9s infinite linear 3s; }
+
+    /* إعدادات السلايدر الاحترافي */
+    .card-slider-wrapper {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    .card-slide {
+      grid-row: 1;
+      grid-column: 1;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.95) translateY(15px);
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                  transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                  visibility 0.7s;
+      z-index: 0;
+    }
+    .card-slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* تخصيص شريط التمرير */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 10px;
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 h-screen w-full overflow-hidden selection:bg-amber-500 selection:text-slate-950 flex flex-col relative">
+<body class="bg-slate-950 text-slate-100 h-[100dvh] flex flex-col justify-between overflow-hidden selection:bg-amber-500 selection:text-slate-950 w-full relative">
 
-  <!-- ==================== 1. نافذة التسجيل (Modal) ==================== -->
-  <div id="login-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl shadow-amber-500/10">
-      <div class="w-16 h-16 bg-amber-500/20 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-amber-500/30">
-        <i data-lucide="user-plus" class="w-8 h-8"></i>
+  <!-- ==================== إشعار حالة الاتصال بالإنترنت ==================== -->
+  <div id="network-status-toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ease-out translate-y-[-150%] opacity-0 pointer-events-none w-[90%] max-w-sm">
+    <div id="network-toast-bg" class="bg-slate-900/95 backdrop-blur-xl border rounded-2xl p-4 shadow-2xl flex items-center gap-3">
+      <div id="network-icon-container" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors">
+        <i data-lucide="wifi-off" id="network-icon" class="w-5 h-5"></i>
       </div>
-      <h2 class="text-xl font-extrabold text-center mb-1 text-slate-100">مرحباً بك في الملتقى</h2>
-      <p class="text-xs text-center text-slate-400 mb-6">يرجى إدخال بياناتك للبدء في الدردشة</p>
+      <div class="flex-1">
+        <h4 id="network-title" class="text-sm font-bold text-slate-100 transition-colors">جاري فحص الاتصال...</h4>
+        <p id="network-msg" class="text-[11px] text-slate-400 mt-0.5 leading-tight">يرجى الانتظار...</p>
+      </div>
+      <button onclick="hideNetworkToast()" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== 1. القائمة العلوية ==================== -->
+  <header id="main-header" class="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-slate-800/80 px-4 py-3 shadow-lg shadow-black/40 shrink-0 transition-all duration-300 w-full">
+    <div class="w-full mx-auto flex items-center justify-between">
       
-      <div class="space-y-4 text-sm">
-        <div>
-          <label class="block text-xs font-bold text-slate-400 mb-1.5">الاسم</label>
-          <input type="text" id="reg-name" placeholder="اكتب اسمك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:border-amber-500 outline-none" />
-        </div>
-        
-        <div>
-          <label class="block text-xs font-bold text-slate-400 mb-1.5">الصورة الشخصية (من الاستوديو أو الملفات)</label>
-          <label for="reg-file-input" class="flex items-center justify-center gap-2 w-full bg-slate-950 border border-dashed border-slate-700 hover:border-amber-500 rounded-xl px-4 py-3 text-slate-300 cursor-pointer transition text-xs font-bold">
-            <i data-lucide="image-plus" class="w-5 h-5 text-amber-500"></i>
-            <span id="file-name-label">اختر صورة من جهازك...</span>
-          </label>
-          <input type="file" id="reg-file-input" accept="image/*" class="hidden" onchange="handleImageSelection(event)" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-400 mb-1.5">كود الصلاحية (للمشرفين والإدارة فقط)</label>
-          <input type="text" id="reg-code" placeholder="اتركه فارغاً إذا كنت طالباً" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:border-amber-500 outline-none" />
-        </div>
-      </div>
-      
-      <div class="mt-8 flex gap-3">
-        <button onclick="saveProfile()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-2.5 rounded-xl transition">حفظ وبدء</button>
-        <button onclick="skipProfile()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl transition">تخطي كطالب</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== 2. نافذة تكبير الصورة (Profile Modal) ==================== -->
-  <div id="profile-modal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeProfileModal()">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-xs text-center shadow-2xl relative" onclick="event.stopPropagation()">
-      <button onclick="closeProfileModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white bg-slate-800 p-1.5 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      <img id="modal-img" src="" class="w-32 h-32 rounded-full object-cover mx-auto border-4 border-slate-800 mb-4 shadow-lg" />
-      <h3 id="modal-name" class="text-lg font-black text-slate-100 mb-1"></h3>
-      <span id="modal-role" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300"></span>
-    </div>
-  </div>
-
-  <!-- ==================== 3. نافذة إعدادات الدردشة ==================== -->
-  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeSettingsModal()">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm shadow-2xl relative space-y-4" onclick="event.stopPropagation()">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-base font-extrabold text-slate-100 flex items-center gap-2">
-          <i data-lucide="settings" class="w-5 h-5 text-amber-500"></i> إعدادات الدردشة
-        </h3>
-        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white bg-slate-800 p-1.5 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-
-      <!-- إعدادات الأصوات -->
-      <div class="space-y-3">
-        <h4 class="text-xs font-bold text-amber-400">إعدادات الأصوات</h4>
-        
-        <div class="flex items-center justify-between bg-slate-950/50 p-2.5 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-300">صوت إرسال الرسائل</span>
-          <input type="checkbox" id="snd-send-toggle" onchange="updateSoundSettings()" class="w-4 h-4 accent-amber-500 cursor-pointer" />
-        </div>
-
-        <div class="flex items-center justify-between bg-slate-950/50 p-2.5 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-300">صوت استقبال الرسائل</span>
-          <input type="checkbox" id="snd-recv-toggle" onchange="updateSoundSettings()" class="w-4 h-4 accent-amber-500 cursor-pointer" />
-        </div>
-
-        <div class="flex items-center justify-between bg-slate-950/50 p-2.5 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-300">صوت الردود (المنشن)</span>
-          <input type="checkbox" id="snd-reply-toggle" onchange="updateSoundSettings()" class="w-4 h-4 accent-amber-500 cursor-pointer" />
-        </div>
-      </div>
-
-      <!-- إدارة البيانات والنشاط -->
-      <div class="space-y-2 pt-2 border-t border-slate-800">
-        <h4 class="text-xs font-bold text-amber-400">النشاط والحساب</h4>
-        
-        <button onclick="clearMyActivity()" class="w-full flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-xl transition">
-          <i data-lucide="trash" class="w-4 h-4"></i> حذف نشاطي (حذف كل رسائلي)
-        </button>
-
-        <button onclick="deleteAccount()" class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 rounded-xl transition">
-          <i data-lucide="user-x" class="w-4 h-4"></i> حذف الحساب وتسجيل الخروج
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== 4. واجهة الدردشة ==================== -->
-  <main class="flex-1 flex flex-col h-full w-full max-w-3xl mx-auto bg-slate-900/80 shadow-2xl relative">
-    
-    <!-- الترويسة -->
-    <header class="flex items-center justify-between p-4 border-b border-slate-800/80 bg-slate-900/95 backdrop-blur z-20 shrink-0">
       <div class="flex items-center gap-3">
         <div class="relative">
-          <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-inner">
-            <i data-lucide="messages-square" class="w-6 h-6"></i>
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-300 p-[2px] shadow-lg shadow-amber-500/20">
+            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-black text-amber-400 text-lg">
+              م
+            </div>
           </div>
-          <span class="absolute -bottom-1 -right-1 flex h-3.5 w-3.5">
+          <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-slate-900"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
           </span>
         </div>
+
         <div>
-          <h1 class="text-sm md:text-base font-extrabold text-slate-100">ملتقى  منقذ المهني</h1>
-          <p class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
-            <i data-lucide="users" class="w-3 h-3 text-emerald-500"></i>
-            متصل الآن: <span id="online-count" class="text-emerald-400 font-bold">1</span>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-base bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              منصة منقذ المهني
+            </h1>
+          </div>
+          <p class="text-xs text-slate-400 flex items-center gap-1">
+            <span id="header-page-title">الرئيسية</span>
+            <span class="text-slate-600">•</span>
+            <span id="header-page-subtitle" class="text-slate-500 text-[11px]">نظرة عامة والملتقى</span>
           </p>
         </div>
       </div>
 
-      <!-- زر الإعدادات -->
-      <button onclick="openSettingsModal()" class="p-2 bg-slate-800/80 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-700 transition flex items-center justify-center">
-        <i data-lucide="settings" class="w-5 h-5 text-amber-400"></i>
-      </button>
-    </header>
-
-    <!-- صندوق الرسائل -->
-    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar text-sm relative scroll-smooth bg-slate-950/40 pb-6">
-      <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3 text-xs text-amber-300/90 text-center mx-auto w-11/12 shadow-sm">
-        👋 مرحباً بك! (اسحب الرسالة للرد، اضغط على صورة أي شخص لعرض حسابه)
-      </div>
-    </div>
-
-    <!-- زر النزول للأسفل -->
-    <button id="scroll-bottom-btn" onclick="scrollToBottom()" class="hidden absolute bottom-[100px] left-1/2 -translate-x-1/2 bg-slate-800/90 border border-slate-700 text-slate-200 p-2 rounded-full shadow-xl z-30 hover:bg-slate-700 transition backdrop-blur-md">
-      <i data-lucide="arrow-down" class="w-5 h-5"></i>
-    </button>
-
-    <!-- زر المنشن -->
-    <div id="mention-badge" onclick="scrollToNextReply()" class="hidden absolute bottom-[100px] right-6 bg-amber-500 text-slate-950 p-3 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)] z-30 cursor-pointer hover:scale-110 transition">
-      <i data-lucide="at-sign" class="w-6 h-6"></i>
-      <span id="mention-count" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-slate-900 shadow-md">1</span>
-    </div>
-
-    <!-- منطقة الإدخال -->
-    <footer class="shrink-0 bg-slate-900/95 backdrop-blur p-3 border-t border-slate-800/80 z-20">
-      <div id="reply-preview" class="hidden shrink-0 flex items-center justify-between bg-slate-950/60 p-2.5 mb-3 rounded-xl border border-amber-500/30">
-          <div class="border-r-2 border-amber-500 pr-3 overflow-hidden flex-1">
-            <p id="reply-preview-sender" class="text-amber-400 text-xs font-bold mb-1"></p>
-            <p id="reply-preview-text" class="text-slate-300 text-xs truncate"></p>
-          </div>
-          <button type="button" onclick="cancelReply()" class="text-slate-500 hover:text-red-400 p-1.5 bg-slate-800 rounded-lg ml-1 transition">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-      </div>
-
-      <form id="chat-form" onsubmit="sendMessage(event)" class="flex items-center gap-2 relative">
-        <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا..." class="flex-1 bg-slate-950/80 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-500/80 transition shadow-inner" required autocomplete="off" />
-        <button type="submit" class="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 hover:brightness-110 active:scale-95 transition font-extrabold shadow-md shrink-0 flex items-center justify-center">
-          <i data-lucide="send" class="w-5 h-5"></i>
+      <div class="flex items-center gap-2">
+        <!-- زر التكبير الخاص بالصفحات المضمنة -->
+        <button id="header-fullscreen-btn" onclick="toggleAppFullscreen()" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 transition-all active:scale-95 shadow-inner">
+          <span class="text-[11px] font-bold">تكبير </span>
+          <i data-lucide="maximize" id="header-fullscreen-icon" class="w-3.5 h-3.5"></i>
         </button>
-      </form>
-    </footer>
 
-  </main>
+        <!-- زر فتح القائمة الجانبية -->
+        <button onclick="openMenu()" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/50 text-slate-200 transition-all active:scale-95 shadow-inner">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
 
-  <!-- ==================== سكربت التشغيل وربط الفايربيس ==================== -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onChildChanged, onChildRemoved, set, onValue, onDisconnect, update, remove, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    </div>
+  </header>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCg8zxqsAQyUhdW5D_1MuL1db885ZzIQvg",
-      authDomain: "munqidhapp-638c0.firebaseapp.com",
-      databaseURL: "https://munqidhapp-638c0-default-rtdb.firebaseio.com",
-      projectId: "munqidhapp-638c0",
-      storageBucket: "munqidhapp-638c0.firebasestorage.app"
-    };
+  <!-- ==================== 2. محتوى الصفحات ==================== -->
+  <main id="main-content" class="w-full flex-1 flex flex-col overflow-hidden relative my-auto transition-all duration-300">
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const chatRef = ref(db, 'munqidh_live_chat_v2');
-
-    let currentUser = JSON.parse(localStorage.getItem('munqidh_user_data'));
-    let selectedImageBase64 = null;
-
-    // إعدادات الأصوات الافتراضية
-    let soundSettings = JSON.parse(localStorage.getItem('munqidh_sound_settings')) || {
-       send: true,
-       recv: true,
-       reply: true
-    };
-
-    if (currentUser) {
-       document.getElementById('login-modal').classList.add('hidden');
-       setupPresence();
-    }
-
-    // تهيئة حالة أزرار الإعدادات
-    document.getElementById('snd-send-toggle').checked = soundSettings.send;
-    document.getElementById('snd-recv-toggle').checked = soundSettings.recv;
-    document.getElementById('snd-reply-toggle').checked = soundSettings.reply;
-
-    window.updateSoundSettings = function() {
-       soundSettings = {
-          send: document.getElementById('snd-send-toggle').checked,
-          recv: document.getElementById('snd-recv-toggle').checked,
-          reply: document.getElementById('snd-reply-toggle').checked
-       };
-       localStorage.setItem('munqidh_sound_settings', JSON.stringify(soundSettings));
-    };
-
-    // إدارة نوافذ الإعدادات
-    window.openSettingsModal = function() {
-       const modal = document.getElementById('settings-modal');
-       modal.classList.remove('hidden');
-       setTimeout(() => modal.classList.remove('opacity-0'), 10);
-    };
-
-    window.closeSettingsModal = function() {
-       const modal = document.getElementById('settings-modal');
-       modal.classList.add('opacity-0');
-       setTimeout(() => modal.classList.add('hidden'), 300);
-    };
-
-    // حذف نشاط المستخدم (رسائله فقط)
-    window.clearMyActivity = async function() {
-       if(!confirm('هل أنت متأكد من حذف جميع رسائلك النشطة في الدردشة؟')) return;
-       const snapshot = await get(chatRef);
-       if(snapshot.exists()) {
-          const updates = {};
-          snapshot.forEach((childSnap) => {
-             const msg = childSnap.val();
-             if(msg.userId === currentUser.id) {
-                updates[childSnap.key] = null;
-             }
-          });
-          await update(chatRef, updates);
-          alert('تم حذف نشاطك بنجاح.');
-          closeSettingsModal();
-       }
-    };
-
-    // حذف الحساب وتسجيل الخروج
-    window.deleteAccount = function() {
-       if(!confirm('هل تريد حقاً حذف حسابك من هذا الجهاز؟')) return;
-       localStorage.removeItem('munqidh_user_data');
-       location.reload();
-    };
-
-    const defaultImages = {
-      user: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-      manager: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-      developer: 'https://cdn-icons-png.flaticon.com/512/6062/6062646.png',
-      moderator: 'https://cdn-icons-png.flaticon.com/512/4042/4042253.png'
-    };
-
-    window.handleImageSelection = function(event) {
-       const file = event.target.files[0];
-       if (file) {
-          document.getElementById('file-name-label').innerText = file.name;
-          const reader = new FileReader();
-          reader.onload = function(e) {
-             const img = new Image();
-             img.src = e.target.result;
-             img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const MAX_WIDTH = 200;
-                const MAX_HEIGHT = 200;
-                let width = img.width;
-                let height = img.height;
-
-                if (width > height) {
-                   if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                } else {
-                   if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                selectedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
-             }
-          };
-          reader.readAsDataURL(file);
-       }
-    };
-
-    window.saveProfile = function() {
-       let name = document.getElementById('reg-name').value.trim() || 'طالب مجتهد';
-       let code = document.getElementById('reg-code').value.trim();
-       
-       let role = 'user';
-       if(code === 'MGR-777') role = 'manager';
-       else if(code === 'DEV-999') role = 'developer';
-       else if(code.startsWith('MOD-1') && parseInt(code.split('-')[1]) <= 110) role = 'moderator';
-
-       let pic = selectedImageBase64 || defaultImages[role];
-
-       currentUser = {
-         id: 'user_' + Date.now() + Math.random().toString(36).substr(2,9),
-         name: name,
-         pic: pic,
-         role: role
-       };
-
-       localStorage.setItem('munqidh_user_data', JSON.stringify(currentUser));
-       document.getElementById('login-modal').classList.add('hidden');
-       setupPresence();
-    }
-
-    window.skipProfile = function() {
-       currentUser = {
-         id: 'user_' + Date.now() + Math.random().toString(36).substr(2,9),
-         name: 'طالب (زائر)',
-         pic: defaultImages.user,
-         role: 'user'
-       };
-       localStorage.setItem('munqidh_user_data', JSON.stringify(currentUser));
-       document.getElementById('login-modal').classList.add('hidden');
-       setupPresence();
-    }
-
-    function setupPresence() {
-      const connectedRef = ref(db, ".info/connected");
-      const myPresenceRef = ref(db, 'munqidh_presence/' + currentUser.id);
+    <!-- ---------- 1. صفحة الرئيسية ---------- -->
+    <div id="page-home" class="page-section space-y-6 pt-6 px-4 overflow-y-auto pb-10">
       
-      onValue(connectedRef, (snap) => {
-        if (snap.val() === true) {
-          set(myPresenceRef, { name: currentUser.name, role: currentUser.role });
-          onDisconnect(myPresenceRef).remove();
-        }
-      });
+      <!-- حاوية السلايدر -->
+      <div class="card-slider-wrapper relative">
+        
+        <!-- 👑 الشريحة الأولى: بطاقة المدير -->
+        <section class="card-slide active relative group rounded-3xl p-[2px] bg-gradient-to-b from-amber-400 via-orange-500/40 to-slate-800 shadow-2xl shadow-amber-500/10 overflow-hidden">
+          <div class="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-600/20 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
+            <i data-lucide="book-open" class="text-amber-500 absolute left-4 animate-float-1 w-8 h-8"></i>
+            <i data-lucide="graduation-cap" class="text-orange-400 absolute right-10 animate-float-2 w-10 h-10"></i>
+            <i data-lucide="pencil-ruler" class="text-yellow-500 absolute left-20 animate-float-3 w-6 h-6"></i>
+            <i data-lucide="award" class="text-orange-500 absolute left-1/2 animate-float-5 w-9 h-9"></i>
+          </div>
 
-      onValue(ref(db, 'munqidh_presence'), (snap) => {
-         document.getElementById('online-count').innerText = snap.size || 0;
-      });
-    }
-
-    const sndSend = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
-    const sndRecv = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3'); // صوت الاستقبال العام
-    const sndReply = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-    
-    document.body.addEventListener('click', () => {
-        if(sndSend.readyState === 0) { sndSend.load(); sndRecv.load(); sndReply.load(); }
-    }, { once: true });
-
-    let replyingTo = null;
-    let unseenReplies = [];
-    const initialLoadTime = Date.now();
-
-    const chatContainer = document.getElementById('chat-messages');
-    const scrollBtn = document.getElementById('scroll-bottom-btn');
-
-    chatContainer.addEventListener('scroll', () => {
-       const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop - chatContainer.clientHeight < 200;
-       if(!isAtBottom) scrollBtn.classList.remove('hidden');
-       else scrollBtn.classList.add('hidden');
-    });
-
-    window.scrollToBottom = function() {
-       chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-    }
-
-    onChildAdded(chatRef, (snapshot) => {
-      const data = snapshot.val();
-      data.id = snapshot.key;
-      appendMessageToUI(data);
-
-      const isNew = data.timestamp > initialLoadTime - 2000;
-      const isReplyToMe = data.replyTo && data.replyTo.userId === currentUser?.id;
-
-      if (isNew && data.userId !== currentUser?.id) {
-         if (isReplyToMe) {
-            if (soundSettings.reply) { sndReply.currentTime = 0; sndReply.play().catch(e => {}); }
-            unseenReplies.push(data.id);
-            updateBadge();
-         } else {
-            if (soundSettings.recv) { sndRecv.currentTime = 0; sndRecv.play().catch(e => {}); }
-         }
-      }
-    });
-
-    onChildChanged(chatRef, (snapshot) => {
-       const data = snapshot.val();
-       const el = document.getElementById(`msg-text-${snapshot.key}`);
-       if(el) {
-          el.innerText = data.text;
-          const editedTag = document.getElementById(`msg-edited-${snapshot.key}`);
-          if(!editedTag) {
-             const tag = document.createElement('span');
-             tag.id = `msg-edited-${snapshot.key}`;
-             tag.className = 'text-[9px] text-slate-500 mr-2';
-             tag.innerText = '(معدل)';
-             el.parentNode.appendChild(tag);
-          }
-       }
-    });
-
-    onChildRemoved(chatRef, (snapshot) => {
-       const wrapper = document.querySelector(`.message-wrapper[data-id="${snapshot.key}"]`);
-       if(wrapper) {
-          wrapper.classList.add('fade-out');
-          setTimeout(() => wrapper.remove(), 300);
-       }
-    });
-
-    window.sendMessage = function(event) {
-      event.preventDefault();
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if (!text || !currentUser) return;
-
-      const newMsg = {
-        userId: currentUser.id,
-        sender: currentUser.name,
-        pic: currentUser.pic,
-        role: currentUser.role,
-        text: text,
-        timestamp: Date.now()
-      };
-
-      if (replyingTo) newMsg.replyTo = replyingTo;
-
-      push(chatRef, newMsg).then(() => {
-         if (soundSettings.send) { sndSend.currentTime = 0; sndSend.play().catch(e => {}); }
-      });
-
-      input.value = '';
-      cancelReply();
-    };
-
-    function appendMessageToUI(data) {
-      const timeStr = new Date(data.timestamp || Date.now()).toLocaleTimeString('ar-IQ', { hour: '2-digit', minute: '2-digit' });
-      const isMe = data.userId === currentUser?.id;
-      const hasModPower = ['manager', 'developer', 'moderator'].includes(currentUser?.role);
-      
-      const roleStyles = {
-        manager: { bg: 'bg-gradient-to-br from-amber-500/20 to-yellow-600/20', border: 'border-amber-500/50', name: 'text-amber-400', badge: '👑 مدير' },
-        developer: { bg: 'bg-gradient-to-br from-cyan-500/20 to-blue-600/20', border: 'border-cyan-500/50', name: 'text-cyan-400', badge: '💻 مطور' },
-        moderator: { bg: 'bg-gradient-to-br from-purple-500/20 to-fuchsia-600/20', border: 'border-purple-500/50', name: 'text-purple-400', badge: '🛡️ مشرف' },
-        user: { bg: isMe ? 'bg-emerald-500/10' : 'bg-slate-800/60', border: isMe ? 'border-emerald-500/30' : 'border-slate-700', name: isMe ? 'text-emerald-400' : 'text-slate-300', badge: '' }
-      };
-
-      const style = roleStyles[data.role] || roleStyles['user'];
-      const editedHTML = data.edited ? `<span id="msg-edited-${data.id}" class="text-[9px] text-slate-500 mr-2">(معدل)</span>` : '';
-
-      let actionButtons = '';
-      if(isMe || hasModPower) {
-        let editBtn = isMe ? `<button onclick="editMessage('${data.id}', \`${escapeHtml(data.text)}\`)" class="text-slate-500 hover:text-blue-400"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>` : '';
-        let delBtn = `<button onclick="deleteMessage('${data.id}')" class="text-slate-500 hover:text-red-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>`;
-        actionButtons = `<div class="flex gap-2 items-center opacity-0 group-hover:opacity-100 transition">${editBtn}${delBtn}</div>`;
-      }
-
-      let replyHTML = '';
-      if (data.replyTo) {
-         replyHTML = `
-           <div onclick="scrollToMessage('${data.replyTo.id}')" class="bg-slate-950/40 p-2 rounded-lg mb-2 border-r-2 ${isMe ? 'border-emerald-500' : 'border-slate-500'} cursor-pointer hover:bg-slate-950/60 transition">
-             <span class="text-[10px] md:text-xs font-bold block mb-0.5 text-slate-400">${escapeHtml(data.replyTo.sender)}</span>
-             <span class="text-xs text-slate-300 truncate block">${escapeHtml(data.replyTo.text)}</span>
-           </div>
-         `;
-      }
-
-      const wrapper = document.createElement('div');
-      wrapper.className = `message-wrapper flex items-start gap-2.5 msg-animate w-full group ${isMe ? 'flex-row-reverse' : ''}`;
-      wrapper.dataset.id = data.id;
-
-      const bubbleHTML = `
-        <img src="${data.pic}" onclick="showProfile('${data.pic}', '${escapeHtml(data.sender)}', '${style.badge || 'طالب'}')" class="w-9 h-9 rounded-full object-cover border border-slate-700 cursor-pointer shrink-0 mt-1 shadow-sm active:scale-90 transition" />
-        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[80%]">
-          <div class="bubble-content ${style.bg} ${style.border} border rounded-2xl p-3 shadow-sm cursor-pointer select-none relative reply-swipe-anim transition-all ${isMe ? 'rounded-tl-none' : 'rounded-tr-none'} min-w-[150px]">
-            ${replyHTML}
-            <div class="flex items-center justify-between gap-3 mb-1.5">
-              <span class="font-extrabold ${style.name} text-xs flex items-center gap-1">
-                ${escapeHtml(data.sender)} 
-                ${style.badge ? `<span class="text-[9px] bg-slate-950/50 px-1.5 py-0.5 rounded-full">${style.badge}</span>` : ''}
+          <div class="bg-slate-900/90 backdrop-blur-xl rounded-[22px] p-5 relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                <span>👑</span> مدير المنصة
               </span>
             </div>
-            <p id="msg-text-${data.id}" class="text-slate-100 text-sm leading-relaxed break-words whitespace-pre-wrap">${escapeHtml(data.text)}</p>
-            <div class="flex items-center justify-between mt-2 gap-4">
-               <span class="text-[9px] text-slate-500" dir="ltr">${timeStr}${editedHTML}</span>
-               ${actionButtons}
+            
+            <div class="flex items-center gap-4">
+              <div class="relative shrink-0">
+                <div class="w-20 h-20 rounded-2xl p-[2px] bg-gradient-to-tr from-yellow-400 via-amber-500 to-orange-600 shadow-xl">
+                  <img src="https://up6.cc/2026/08/178670166237561.jpg" alt="صورة المدير" class="w-full h-full object-cover rounded-[14px]" />
+                </div>
+                <div class="absolute -bottom-1 -left-1 bg-amber-500 text-slate-950 p-1 rounded-full shadow-lg text-[10px]">
+                  <i data-lucide="check" class="w-3 h-3"></i>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h2 class="text-base font-extrabold text-slate-100 leading-tight truncate">الأستاذ علي محمد </h2>
+                <p class="text-[11px] text-amber-400 font-medium mt-1">المؤسس والرائد للتعليم المهني</p>
+                <p class="text-[11px] text-slate-400 mt-2 line-clamp-2 leading-relaxed">"نعمل على بناء جيل متمكن علمياً ومهنياً لخدمة المجتمع وبناء المستقبل."</p>
+              </div>
             </div>
+
+            <button onclick="openDirectorModal()" class="w-full mt-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2">
+              <i data-lucide="share-2" class="w-4 h-4"></i>
+              استعراض الحسابات الرسمية
+            </button>
+          </div>
+        </section>
+
+        <!-- 💻 الشريحة الثانية: بطاقة المطور -->
+        <section class="card-slide relative group rounded-3xl p-[2px] bg-gradient-to-b from-cyan-400 via-blue-500/40 to-slate-800 shadow-2xl shadow-cyan-500/10 overflow-hidden">
+          <div class="absolute -top-24 -left-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
+            <i data-lucide="code-2" class="text-cyan-400 absolute left-4 animate-float-1 w-8 h-8"></i>
+            <i data-lucide="terminal" class="text-blue-400 absolute right-10 animate-float-2 w-10 h-10"></i>
+            <i data-lucide="cpu" class="text-indigo-400 absolute left-20 animate-float-3 w-6 h-6"></i>
+            <i data-lucide="database" class="text-cyan-500 absolute left-1/2 animate-float-5 w-9 h-9"></i>
+          </div>
+
+          <div class="bg-slate-900/90 backdrop-blur-xl rounded-[22px] p-5 relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                <span>💻</span> فريق التطوير
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <div class="relative shrink-0">
+                <div class="w-20 h-20 rounded-2xl p-[2px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 shadow-xl">
+                  <img src="https://up6.cc/2026/08/178670288484391.jpg" alt="صورة المطور" class="w-full h-full object-cover rounded-[14px]" />
+                </div>
+                <div class="absolute -bottom-1 -left-1 bg-cyan-500 text-slate-950 p-1 rounded-full shadow-lg text-[10px]">
+                  <i data-lucide="check" class="w-3 h-3"></i>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h2 class="text-base font-extrabold text-slate-100 leading-tight truncate"> المهندس سجاد علي  </h2>
+                <p class="text-[11px] text-cyan-400 font-medium mt-1">Full-Stack Software Engineer</p>
+                <p class="text-[11px] text-slate-400 mt-2 line-clamp-2 leading-relaxed">"نبتكر أحدث الحلول البرمجية الذكية لنرتقي بتجربة التعلم الرقمي نحو آفاق جديدة."</p>
+              </div>
+            </div>
+
+            <button onclick="openDevModal()" class="w-full mt-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-extrabold text-xs shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2">
+              <i data-lucide="headset" class="w-4 h-4"></i>
+              تواصل مع المطور 
+            </button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- مؤشرات السلايدر -->
+      <div class="flex justify-center items-center gap-1.5 pt-1">
+        <button id="dot-0" class="w-4 h-1.5 rounded-full bg-amber-500 transition-all duration-500"></button>
+        <button id="dot-1" class="w-1.5 h-1.5 rounded-full bg-slate-700 transition-all duration-500"></button>
+      </div>
+      
+      <!-- رسالة ترحيبية -->
+      <div class="p-6 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/30 flex flex-col items-center text-center mt-6">
+        <div class="w-14 h-14 rounded-full bg-amber-500/10 flex items-center justify-center mb-3">
+          <i data-lucide="rocket" class="w-7 h-7 text-amber-500"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-200">أهلاً بك في منصة منقذ المهني</h3>
+        <p class="text-[11px] text-slate-400 mt-2">يمكنك التنقل بين أقسام المنصة والمكتبة والملتقى بكل سهولة من خلال القائمة السفلية أو الجانبية.</p>
+      </div>
+
+    </div>
+
+    <!-- ---------- 2. صفحة الأقسام ---------- -->
+    <div id="page-sections" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
+      
+      <button id="sections-floating-minimize-btn" onclick="toggleAppFullscreen()" class="hidden absolute top-4 left-4 z-[60] flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-xl border border-amber-500/50 text-amber-400 shadow-xl transition-all active:scale-95 hover:bg-amber-500/20">
+        <span class="text-[11px] font-bold">تصغير </span>
+        <i data-lucide="minimize" class="w-3.5 h-3.5"></i>
+      </button>
+
+      <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
+        <iframe src="https://aksam-seven.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
+      </div>
+    </div>
+
+    <!-- ---------- 3. صفحة الملتقى ---------- -->
+    <div id="page-chat" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative">
+      
+      <button id="chat-floating-minimize-btn" onclick="toggleAppFullscreen()" class="hidden absolute top-4 left-4 z-[60] flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-xl border border-amber-500/50 text-amber-400 shadow-xl transition-all active:scale-95 hover:bg-amber-500/20">
+        <span class="text-[11px] font-bold">تصغير </span>
+        <i data-lucide="minimize" class="w-3.5 h-3.5"></i>
+      </button>
+
+      <div id="chat-iframe-container" class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative transition-all duration-300">
+        <iframe src="https://shat-murex.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="الملتقى الرقمي"></iframe>
+      </div>
+      
+    </div>
+
+    <!-- ---------- 4. صفحة المحاضرات ---------- -->
+    <div id="page-lectures" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
+      
+      <button id="lectures-floating-minimize-btn" onclick="toggleAppFullscreen()" class="hidden absolute top-[85px] left-4 z-[100] flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-xl border border-cyan-500/50 text-cyan-300 shadow-xl hover:bg-slate-800 transition-all active:scale-95">
+        <span class="text-[11px] font-bold">تصغير</span>
+        <i data-lucide="minimize-2" class="w-3.5 h-3.5"></i>
+      </button>
+
+      <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
+        <iframe 
+          src="https://gfjhh.vercel.app/" 
+          class="w-full h-full border-0 absolute inset-0" 
+          title="المحاضرات والدروس"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- ---------- 5. صفحة الكتب (بدون زر التكبير/التصغير) ---------- -->
+    <div id="page-books" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
+      <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
+        <iframe 
+          src="https://almktba.vercel.app/" 
+          class="w-full h-full border-0 absolute inset-0" 
+          title="المكتبة والملازم"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+    
+  </main>
+
+  <!-- ==================== 3. القائمة السفلية ==================== -->
+  <nav id="bottom-nav" class="sticky bottom-0 left-0 right-0 z-40 backdrop-blur-xl bg-slate-900/85 border-t border-slate-800/80 px-4 py-2.5 shrink-0 transition-all duration-300 w-full">
+    <div class="w-full mx-auto flex items-center justify-between">
+      
+      <button id="tab-home" onclick="switchTab('home')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-amber-400 font-bold scale-105">
+        <i data-lucide="home" class="w-6 h-6"></i><span class="text-[10px]">الرئيسية</span><span class="tab-indicator absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
+      </button>
+      
+      <button id="tab-books" onclick="switchTab('books')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
+        <i data-lucide="book-open" class="w-6 h-6"></i><span class="text-[10px]">المكتبة</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
+      </button>
+
+      <!-- زر الملتقى -->
+      <button id="tab-chat" onclick="switchTab('chat')" class="relative -mt-8 flex flex-col items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-amber-400 via-orange-500 to-amber-600 text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.3)] border-[4px] border-slate-950 transition-transform active:scale-95 z-50 group">
+        <div class="absolute inset-0 rounded-full animate-ping bg-amber-500/40 opacity-75 duration-1000"></div>
+        <i data-lucide="messages-square" class="w-6 h-6 relative z-10 group-hover:scale-110 transition-transform"></i>
+        <span class="absolute top-0 right-0 flex h-3 w-3 z-20">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-slate-950"></span>
+        </span>
+      </button>
+
+      <button id="tab-lectures" onclick="switchTab('lectures')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
+        <i data-lucide="monitor-play" class="w-6 h-6"></i><span class="text-[10px]">المحاضرات</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
+      </button>
+      
+      <button id="tab-sections" onclick="switchTab('sections')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
+        <i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[10px]">الأقسام</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ==================== 4. القائمة الجانبية ==================== -->
+  <div id="sidebar-overlay" onclick="closeMenu()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <aside id="sidebar-menu" class="fixed top-0 right-0 h-full w-[290px] max-w-[85vw] bg-slate-900/95 backdrop-blur-2xl border-l border-slate-800/80 z-[70] translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-[-10px_0_30px_rgba(0,0,0,0.5)]">
+    
+    <div class="p-4 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/40">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 p-[2px] shadow-md shadow-amber-500/20">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-black text-amber-400 text-sm">م</div>
+        </div>
+        <div>
+          <h2 class="font-extrabold text-sm bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">منصة منقذ المهني</h2>
+          <p class="text-[10px] text-slate-400">القائمة الرئيسية والتطبيقات</p>
+        </div>
+      </div>
+      <button onclick="closeMenu()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 hover:text-amber-400 text-slate-400 transition-all active:scale-90">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto p-4 space-y-5 custom-scrollbar">
+      <div>
+        <p class="px-2 mb-2 text-[10px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+          <span>📍</span> الأقسام الرئيسية
+        </p>
+        <div class="space-y-1.5">
+          <button id="menu-item-home" onclick="navigateFromMenu('home')" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
+            <div class="flex items-center gap-3">
+              <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="home" class="w-4 h-4"></i></div>
+              <span class="text-xs font-bold">الرئيسية</span>
+            </div>
+            <span class="sidebar-active-badge hidden w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
+          </button>
+          
+          <button id="menu-item-sections" onclick="navigateFromMenu('sections')" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
+            <div class="flex items-center gap-3">
+              <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="layout-grid" class="w-4 h-4"></i></div>
+              <span class="text-xs font-bold">أقسام المنصة</span>
+            </div>
+            <span class="sidebar-active-badge hidden w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
+          </button>
+
+          <button id="menu-item-books" onclick="navigateFromMenu('books')" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
+            <div class="flex items-center gap-3">
+              <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="book-open" class="w-4 h-4"></i></div>
+              <span class="text-xs font-bold">المكتبة والملازم</span>
+            </div>
+            <span class="sidebar-active-badge hidden w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
+          </button>
+
+          <button id="menu-item-lectures" onclick="navigateFromMenu('lectures')" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
+            <div class="flex items-center gap-3">
+              <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="monitor-play" class="w-4 h-4"></i></div>
+              <span class="text-xs font-bold">الدروس المرئية</span>
+            </div>
+            <span class="sidebar-active-badge hidden w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <p class="px-2 mb-2 text-[10px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+          <span>🛠️</span> الخدمات والتواصل
+        </p>
+        <div class="space-y-1.5">
+          <button onclick="openDevModal(); closeMenu();" class="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-slate-300 hover:bg-slate-800/80 hover:text-emerald-400 transition-all border border-transparent hover:border-slate-700/50 group">
+            <div class="flex items-center gap-3">
+              <div class="p-2 rounded-xl bg-slate-800 text-slate-400 group-hover:bg-emerald-500/10 group-hover:text-emerald-400 transition-colors">
+                <i data-lucide="headset" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold">الدعم الفني المباشر</span>
+            </div>
+            <span class="px-2 py-0.5 text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">متاح</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800/80 bg-slate-950/60 space-y-3">
+      <div onclick="openDirectorModal(); closeMenu();" class="p-2.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-slate-900 border border-amber-500/25 flex items-center gap-3 shadow-md cursor-pointer hover:border-amber-500/50 transition">
+        <div class="relative shrink-0">
+          <img src="https://up6.cc/2026/08/178670166237561.jpg" alt="مدير المنصة" class="w-9 h-9 rounded-xl object-cover border border-amber-400/50 shadow">
+          <span class="absolute -top-1.5 -right-1.5 text-[11px]">👑</span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">مدير المنصة</span>
+          <p class="text-xs font-extrabold text-slate-100 truncate mt-0.5">الأستاذ علي محمد</p>
+        </div>
+      </div>
+
+      <div onclick="openDevModal(); closeMenu();" class="flex items-center justify-between text-[11px] text-slate-400 pt-1 px-1 border-t border-slate-800/60 cursor-pointer hover:text-slate-200 transition">
+        <div class="flex items-center gap-2">
+          <img src="https://up6.cc/2026/08/178670288484391.jpg" alt="المطور" class="w-6 h-6 rounded-full object-cover border border-cyan-500/40">
+          <span class="text-[10px] text-slate-400">برمجة <strong class="text-cyan-400 font-bold">م. سجاد علي</strong></span>
+        </div>
+        <span class="text-[10px] text-slate-500 font-medium">© 2026</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== النوافذ المنبثقة ==================== -->
+  <div id="director-modal-overlay" onclick="closeDirectorModal()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[80] opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div id="director-modal" onclick="event.stopPropagation()" class="w-full max-w-md bg-slate-900/95 border border-amber-500/30 rounded-t-[32px] sm:rounded-3xl p-6 shadow-2xl shadow-amber-500/10 translate-y-full sm:translate-y-10 transition-transform duration-300 ease-out space-y-5 relative overflow-hidden">
+      <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
+        <div class="flex items-center gap-3">
+          <img src="https://up6.cc/2026/08/178670166237561.jpg" class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-400/80 shadow-lg shadow-amber-500/20" alt="المدير">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-100 flex items-center gap-1.5">الأستاذ علي محمد 👑</h3>
+            <p class="text-xs text-amber-400 font-bold">مدير منصة منقذ المهني</p>
           </div>
         </div>
-      `;
+        <button onclick="closeDirectorModal()" class="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
 
-      wrapper.innerHTML = bubbleHTML;
-      chatContainer.appendChild(wrapper);
+      <div class="space-y-3 relative z-10">
+        <a href="https://t.me/kin_k2" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-blue-600/20 border border-slate-700/60 hover:border-blue-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.99-1.73 6.66-2.87 8.02-3.44 3.82-1.59 4.61-1.87 5.13-1.88.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.14-.03.22z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-blue-300">القناة الرسمية العامة</p>
+              <p class="text-[10px] text-slate-400">تابع أحدث الأخبار والتبليغات</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-blue-400"></i>
+        </a>
+        <a href="https://t.me/bb5y5" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-sky-600/20 border border-slate-700/60 hover:border-sky-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 group-hover:scale-110 transition">
+              <i data-lucide="send" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-sky-300">التواصل عبر التليجرام</p>
+              <p class="text-[10px] text-slate-400">@bb5y5</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-sky-400"></i>
+        </a>
+        <a href="https://www.tiktok.com/@bb5y58?_r=1&_t=ZS-98sFGcgjEn6" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-pink-600/20 border border-slate-700/60 hover:border-pink-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .56.04.83.1v-3.5a6.37 6.37 0 0 0-.83-.05A6.34 6.34 0 0 0 3 15.57a6.34 6.34 0 0 0 10.86 4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.18z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-pink-300">الحساب الرسمي TikTok</p>
+              <p class="text-[10px] text-slate-400">مقاطع شروحات ونصائح دراسية</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-pink-400"></i>
+        </a>
+        <a href="https://wa.me/9647869733666" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-emerald-600/20 border border-slate-700/60 hover:border-emerald-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition">
+              <i data-lucide="phone-call" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-emerald-300">التواصل عبر الواتساب</p>
+              <p class="text-[10px] text-slate-400" dir="ltr">+964 786 973 3666</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-emerald-400"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 
-      const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop - chatContainer.clientHeight < 150;
-      if (isAtBottom || isMe) chatContainer.scrollTop = chatContainer.scrollHeight;
+  <div id="dev-modal-overlay" onclick="closeDevModal()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[80] opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div id="dev-modal" onclick="event.stopPropagation()" class="w-full max-w-md bg-slate-900/95 border border-cyan-500/30 rounded-t-[32px] sm:rounded-3xl p-6 shadow-2xl shadow-cyan-500/10 translate-y-full sm:translate-y-10 transition-transform duration-300 ease-out space-y-5 relative overflow-hidden">
+      <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-      setupTouchGestures(wrapper.querySelector('.bubble-content'), data);
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
+        <div class="flex items-center gap-3">
+          <img src="https://up6.cc/2026/08/178670288484391.jpg" class="w-12 h-12 rounded-2xl object-cover border-2 border-cyan-400/80 shadow-lg shadow-cyan-500/20" alt="المطور">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-100 flex items-center gap-1.5">المهندس سجاد علي 💻</h3>
+            <p class="text-xs text-cyan-400 font-bold">مطور البرمجيات والمنصة</p>
+          </div>
+        </div>
+        <button onclick="closeDevModal()" class="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-cyan-400 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 relative z-10">
+        <a href="https://www.instagram.com/1.c.1s?igsh=dGU4bG00dzkxbjdi" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-pink-600/20 border border-slate-700/60 hover:border-pink-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition">
+              <i data-lucide="instagram" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-pink-300">الحساب الرسمي Instagram</p>
+              <p class="text-[10px] text-slate-400">@1.c.1s</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-pink-400"></i>
+        </a>
+        <a href="https://t.me/Saj_12ad" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-sky-600/20 border border-slate-700/60 hover:border-sky-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 group-hover:scale-110 transition">
+              <i data-lucide="send" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-sky-300">التواصل عبر التليجرام</p>
+              <p class="text-[10px] text-slate-400">@Saj_12ad</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-sky-400"></i>
+        </a>
+        <a href="https://wa.me/9647826246741" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-emerald-600/20 border border-slate-700/60 hover:border-emerald-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition">
+              <i data-lucide="phone" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-emerald-300">التواصل عبر الواتساب</p>
+              <p class="text-[10px] text-slate-400" dir="ltr">+964 782 624 6741</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-emerald-400"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 7. السكربتات والبرمجيات العامة ==================== -->
+  <script>
+    lucide.createIcons();
+
+    /* ----- منطق فحص قوة واتصال الإنترنت ----- */
+    const networkToast = document.getElementById('network-status-toast');
+    const networkToastBg = document.getElementById('network-toast-bg');
+    const networkTitle = document.getElementById('network-title');
+    const networkMsg = document.getElementById('network-msg');
+    const networkIconContainer = document.getElementById('network-icon-container');
+    const networkIcon = document.getElementById('network-icon');
+    let networkTimeout;
+
+    function showNetworkToast(type) {
+      if (networkTimeout) clearTimeout(networkTimeout);
+      
+      networkToast.classList.remove('translate-y-[-150%]', 'opacity-0', 'pointer-events-none');
+      networkToast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+      networkToastBg.className = 'bg-slate-900/95 backdrop-blur-xl border rounded-2xl p-4 shadow-2xl flex items-center gap-3';
+      networkIconContainer.className = 'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors';
+
+      if (type === 'offline') {
+        networkToastBg.classList.add('border-red-500/50', 'shadow-red-500/20');
+        networkIconContainer.classList.add('bg-red-500/10', 'border', 'border-red-500/20', 'text-red-400', 'animate-pulse');
+        networkTitle.textContent = 'انقطع الاتصال بالإنترنت';
+        networkTitle.className = 'text-sm font-bold text-red-400';
+        networkMsg.textContent = 'أنت الآن غير متصل بالشبكة، قد تتوقف المنصة عن العمل.';
+        networkIcon.setAttribute('data-lucide', 'wifi-off');
+        
+      } else if (type === 'weak') {
+        networkToastBg.classList.add('border-amber-500/50', 'shadow-amber-500/20');
+        networkIconContainer.classList.add('bg-amber-500/10', 'border', 'border-amber-500/20', 'text-amber-400');
+        networkTitle.textContent = 'تنبيه: اتصال الإنترنت ضعيف';
+        networkTitle.className = 'text-sm font-bold text-amber-400';
+        networkMsg.textContent = 'الشبكة لديك ضعيفة جداً، قد تواجه بطئاً أو توقفاً مفاجئاً.';
+        networkIcon.setAttribute('data-lucide', 'alert-triangle');
+        
+      } else if (type === 'online') {
+        networkToastBg.classList.add('border-emerald-500/50', 'shadow-emerald-500/20');
+        networkIconContainer.classList.add('bg-emerald-500/10', 'border', 'border-emerald-500/20', 'text-emerald-400');
+        networkTitle.textContent = 'تم استعادة الاتصال';
+        networkTitle.className = 'text-sm font-bold text-emerald-400';
+        networkMsg.textContent = 'أنت الآن متصل بشبكة إنترنت مستقرة.';
+        networkIcon.setAttribute('data-lucide', 'wifi');
+        
+        networkTimeout = setTimeout(hideNetworkToast, 4000);
+      }
+      
       lucide.createIcons();
     }
 
-    window.deleteMessage = function(id) {
-       if(confirm('هل أنت متأكد من حذف هذه الرسالة؟')) {
-          remove(ref(db, `munqidh_live_chat_v2/${id}`));
-       }
-    };
-
-    window.editMessage = function(id, oldText) {
-       const newText = prompt('تعديل الرسالة:', oldText);
-       if(newText !== null && newText.trim() !== '' && newText !== oldText) {
-          update(ref(db, `munqidh_live_chat_v2/${id}`), { text: newText.trim(), edited: true });
-       }
-    };
-
-    function setupTouchGestures(element, data) {
-      let startX = 0, startY = 0, pressTimer;
-      element.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-        element.style.transform = 'scale(0.98)';
-        pressTimer = setTimeout(() => { triggerReply(data); if(navigator.vibrate) navigator.vibrate(50); }, 500); 
-      }, {passive: true});
-
-      element.addEventListener('touchmove', (e) => {
-        let diffX = startX - e.touches[0].clientX;
-        let diffY = Math.abs(startY - e.touches[0].clientY);
-        if(diffX > 10 || diffY > 10) clearTimeout(pressTimer); 
-        if (diffX > 50 && diffY < 30) { triggerReply(data); if(navigator.vibrate) navigator.vibrate(50); startX = e.touches[0].clientX; }
-      }, {passive: true});
-
-      element.addEventListener('touchend', () => { clearTimeout(pressTimer); element.style.transform = 'scale(1)'; });
-      element.addEventListener('touchcancel', () => { clearTimeout(pressTimer); element.style.transform = 'scale(1)'; });
-      element.addEventListener('dblclick', () => triggerReply(data));
+    function hideNetworkToast() {
+      networkToast.classList.add('translate-y-[-150%]', 'opacity-0', 'pointer-events-none');
+      networkToast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
     }
 
-    function triggerReply(data) {
-       replyingTo = { id: data.id, userId: data.userId, sender: data.sender, text: data.text };
-       document.getElementById('reply-preview-sender').innerText = 'الرد على: ' + data.sender;
-       document.getElementById('reply-preview-text').innerText = data.text;
-       document.getElementById('reply-preview').classList.remove('hidden');
-       document.getElementById('chat-input').focus();
+    function checkConnection() {
+      if (!navigator.onLine) {
+        showNetworkToast('offline');
+      } else {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection && (connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g')) {
+          showNetworkToast('weak');
+        } else {
+          if (networkToast.classList.contains('opacity-100') && (networkTitle.textContent.includes('انقطع') || networkTitle.textContent.includes('ضعيف'))) {
+            showNetworkToast('online');
+          }
+        }
+      }
     }
 
-    window.cancelReply = function() {
-       replyingTo = null; document.getElementById('reply-preview').classList.add('hidden');
+    window.addEventListener('online', checkConnection);
+    window.addEventListener('offline', checkConnection);
+
+    if (navigator.connection) {
+      navigator.connection.addEventListener('change', checkConnection);
     }
+    
+    setTimeout(() => {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!navigator.onLine) {
+        showNetworkToast('offline');
+      } else if (connection && (connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g')) {
+        showNetworkToast('weak');
+      }
+    }, 1500);
 
-    window.scrollToMessage = function(id) {
-       const el = document.querySelector(`.message-wrapper[data-id="${id}"]`);
-       if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          const bubble = el.querySelector('.bubble-content');
-          bubble.classList.add('bg-white/20', 'ring-2', 'ring-white');
-          setTimeout(() => bubble.classList.remove('bg-white/20', 'ring-2', 'ring-white'), 1500);
-       }
-    };
+    /* ----- منطق السلايدر ----- */
+    const slides = document.querySelectorAll('.card-slide');
+    const dots = [document.getElementById('dot-0'), document.getElementById('dot-1')];
+    let currentSlide = 0;
 
-    function updateBadge() {
-       const badge = document.getElementById('mention-badge');
-       const countElem = document.getElementById('mention-count');
-       if (unseenReplies.length > 0) { badge.classList.remove('hidden'); countElem.innerText = unseenReplies.length; }
-       else badge.classList.add('hidden');
+    function showNextSlide() {
+      slides[currentSlide].classList.remove('active');
+      dots[currentSlide].className = 'w-1.5 h-1.5 rounded-full bg-slate-700 transition-all duration-500';
+
+      currentSlide = (currentSlide + 1) % slides.length;
+      
+      slides[currentSlide].classList.add('active');
+      
+      if(currentSlide === 0) {
+        dots[currentSlide].className = 'w-4 h-1.5 rounded-full bg-amber-500 transition-all duration-500';
+      } else {
+        dots[currentSlide].className = 'w-4 h-1.5 rounded-full bg-cyan-500 transition-all duration-500';
+      }
     }
+    setInterval(showNextSlide, 6000);
 
-    window.scrollToNextReply = function() {
-       if (unseenReplies.length > 0) {
-          const targetId = unseenReplies.shift();
-          scrollToMessage(targetId);
-          updateBadge();
-       }
+    /* ----- منطق تبديل الصفحات ----- */
+    let currentActiveTab = 'home';
+    const pageMeta = {
+      home: { name: 'الرئيسية', subtitle: 'نظرة عامة والمنصة' },
+      sections: { name: 'أقسام المنصة', subtitle: 'تصفح جميع الأقسام' },
+      chat: { name: 'الملتقى الرقمي', subtitle: '<span class="text-emerald-400 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span></span> نشط الآن </span>' },
+      books: { name: 'الكتب والملازم', subtitle: 'المكتبة الشاملة' },
+      lectures: { name: 'المحاضرات', subtitle: 'الدروس المرئية' }
     };
 
-    window.showProfile = function(pic, name, role) {
-       document.getElementById('modal-img').src = pic;
-       document.getElementById('modal-name').innerText = name;
-       document.getElementById('modal-role').innerText = role;
-       
-       const modal = document.getElementById('profile-modal');
-       modal.classList.remove('hidden');
-       setTimeout(() => modal.classList.remove('opacity-0'), 10);
-    };
+    function switchTab(tabKey) {
+      currentActiveTab = tabKey;
+      document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+      
+      const targetPage = document.getElementById(`page-${tabKey}`);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+        if (tabKey === 'chat' || tabKey === 'sections' || tabKey === 'lectures' || tabKey === 'books') {
+          targetPage.classList.add('flex');
+        } else {
+          document.getElementById('page-chat')?.classList.remove('flex');
+          document.getElementById('page-sections')?.classList.remove('flex');
+          document.getElementById('page-lectures')?.classList.remove('flex');
+          document.getElementById('page-books')?.classList.remove('flex');
+        }
+      }
 
-    window.closeProfileModal = function() {
-       const modal = document.getElementById('profile-modal');
-       modal.classList.add('opacity-0');
-       setTimeout(() => modal.classList.add('hidden'), 300);
-    };
+      if (pageMeta[tabKey]) {
+        document.getElementById('header-page-title').innerHTML = pageMeta[tabKey].name;
+        document.getElementById('header-page-subtitle').innerHTML = pageMeta[tabKey].subtitle;
+      }
 
-    function escapeHtml(string) {
-      return String(string).replace(/[&<>"']/g, function (s) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s];
+      const fullscreenBtn = document.getElementById('header-fullscreen-btn');
+      
+      // التعديل هنا: تمت إزالة tabKey === 'books' لمنع ظهور زر التكبير في المكتبة
+      if (tabKey === 'chat' || tabKey === 'sections' || tabKey === 'lectures') {
+        if (fullscreenBtn) fullscreenBtn.classList.remove('hidden');
+      } else {
+        if (fullscreenBtn) fullscreenBtn.classList.add('hidden');
+        if (isAppFullscreen) toggleAppFullscreen();
+      }
+
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.className = 'nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200';
+        const indicator = tab.querySelector('.tab-indicator');
+        if (indicator) indicator.classList.add('hidden');
       });
+
+      const activeTabBtn = document.getElementById(`tab-${tabKey}`);
+      if (activeTabBtn && tabKey !== 'chat') {
+        activeTabBtn.className = 'nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-amber-400 font-bold scale-105';
+        const activeIndicator = activeTabBtn.querySelector('.tab-indicator');
+        if (activeIndicator) activeIndicator.classList.remove('hidden');
+      }
+
+      updateSidebarActive(tabKey);
     }
 
-    lucide.createIcons();
+    function updateSidebarActive(activeKey) {
+      document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
+        btn.className = 'sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-slate-300 hover:bg-slate-800/80 hover:text-amber-400 transition-all border border-transparent hover:border-slate-700/50 group';
+        const iconBox = btn.querySelector('.sidebar-icon-box');
+        if (iconBox) iconBox.className = 'sidebar-icon-box p-2 rounded-xl bg-slate-800 text-slate-400 group-hover:bg-amber-500/10 group-hover:text-amber-400 transition-colors';
+        const badge = btn.querySelector('.sidebar-active-badge');
+        if (badge) badge.classList.add('hidden');
+      });
+
+      const activeSidebarBtn = document.getElementById(`menu-item-${activeKey}`);
+      if (activeSidebarBtn) {
+        activeSidebarBtn.className = 'sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/10 to-transparent text-amber-300 font-bold border border-amber-500/30 shadow-md shadow-amber-500/5 group';
+        const iconBox = activeSidebarBtn.querySelector('.sidebar-icon-box');
+        if (iconBox) iconBox.className = 'sidebar-icon-box p-2 rounded-xl bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20 transition-colors';
+        const badge = activeSidebarBtn.querySelector('.sidebar-active-badge');
+        if (badge) badge.classList.remove('hidden');
+      }
+    }
+
+    /* ----- القائمة الجانبية ----- */
+    const sidebar = document.getElementById('sidebar-menu');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function openMenu() {
+      sidebar.classList.remove('translate-x-full');
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100', 'pointer-events-auto');
+    }
+
+    function closeMenu() {
+      sidebar.classList.add('translate-x-full');
+      overlay.classList.remove('opacity-100', 'pointer-events-auto');
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function navigateFromMenu(tabKey) {
+      switchTab(tabKey);
+      setTimeout(() => closeMenu(), 150);
+    }
+
+    /* ----- النوافذ المنبثقة ----- */
+    const dirOverlay = document.getElementById('director-modal-overlay');
+    const dirModal = document.getElementById('director-modal');
+    
+    function openDirectorModal() {
+      dirOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      dirOverlay.classList.add('opacity-100', 'pointer-events-auto');
+      dirModal.classList.remove('translate-y-full', 'sm:translate-y-10');
+      dirModal.classList.add('translate-y-0');
+    }
+
+    function closeDirectorModal() {
+      dirOverlay.classList.remove('opacity-100', 'pointer-events-auto');
+      dirOverlay.classList.add('opacity-0', 'pointer-events-none');
+      dirModal.classList.remove('translate-y-0');
+      dirModal.classList.add('translate-y-full', 'sm:translate-y-10');
+    }
+
+    const devOverlay = document.getElementById('dev-modal-overlay');
+    const devModal = document.getElementById('dev-modal');
+
+    function openDevModal() {
+      devOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      devOverlay.classList.add('opacity-100', 'pointer-events-auto');
+      devModal.classList.remove('translate-y-full', 'sm:translate-y-10');
+      devModal.classList.add('translate-y-0');
+    }
+
+    function closeDevModal() {
+      devOverlay.classList.remove('opacity-100', 'pointer-events-auto');
+      devOverlay.classList.add('opacity-0', 'pointer-events-none');
+      devModal.classList.remove('translate-y-0');
+      devModal.classList.add('translate-y-full', 'sm:translate-y-10');
+    }
+
+    updateSidebarActive('home');
+    
+    /* ----- منطق تكبير/تصغير التطبيقات ----- */
+    let isAppFullscreen = false;
+
+    window.toggleAppFullscreen = function() {
+      isAppFullscreen = !isAppFullscreen;
+      
+      const bottomNav = document.getElementById('bottom-nav'); 
+      const mainHeader = document.getElementById('main-header');
+      
+      const chatMinimizeBtn = document.getElementById('chat-floating-minimize-btn');
+      const sectionsMinimizeBtn = document.getElementById('sections-floating-minimize-btn');
+      const lecturesMinimizeBtn = document.getElementById('lectures-floating-minimize-btn');
+      // تمت إزالة زر تصغير المكتبة من هنا أيضاً
+
+      if (isAppFullscreen) {
+        if(bottomNav) bottomNav.classList.add('hidden');
+        if(mainHeader) mainHeader.classList.add('hidden');
+        
+        if(currentActiveTab === 'chat' && chatMinimizeBtn) chatMinimizeBtn.classList.remove('hidden');
+        if(currentActiveTab === 'sections' && sectionsMinimizeBtn) sectionsMinimizeBtn.classList.remove('hidden');
+        if(currentActiveTab === 'lectures' && lecturesMinimizeBtn) lecturesMinimizeBtn.classList.remove('hidden');
+      } else {
+        if(bottomNav) bottomNav.classList.remove('hidden');
+        if(mainHeader) mainHeader.classList.remove('hidden');
+        
+        if(chatMinimizeBtn) chatMinimizeBtn.classList.add('hidden');
+        if(sectionsMinimizeBtn) sectionsMinimizeBtn.classList.add('hidden');
+        if(lecturesMinimizeBtn) lecturesMinimizeBtn.classList.add('hidden');
+      }
+      
+      lucide.createIcons();
+    };
   </script>
+
 </body>
 </html>
