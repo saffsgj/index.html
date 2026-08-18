@@ -465,7 +465,73 @@
     </div>
   </aside>
 
-  <!-- ==================== النوافذ المنبثقة ==================== -->
+  <!-- ==================== نافذة الترحيب وانضمام للقنوات (الجديدة) ==================== -->
+  <div id="welcome-modal-overlay" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[90] flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+    <div id="welcome-modal" class="w-full max-w-md bg-slate-900/95 border border-amber-500/40 rounded-3xl p-6 shadow-2xl shadow-amber-500/20 transform scale-95 transition-all duration-300 relative overflow-hidden">
+      <!-- خلفية متوهجة -->
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- رأس النافذة -->
+      <div class="text-center relative z-10 mb-5">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-400 p-[2px] shadow-xl shadow-amber-500/20 mb-3">
+          <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-amber-400">
+            <i data-lucide="sparkles" class="w-8 h-8"></i>
+          </div>
+        </div>
+        <h3 class="text-lg font-extrabold bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+          مرحباً بك في منصة منقذ المهني! 🎓
+        </h3>
+        <p class="text-xs text-slate-400 mt-1">انضم إلى مجتمعنا الرسمي لتصلك أحدث التبليغات، الملازم، والامتحانات أولاً بأول.</p>
+      </div>
+
+      <!-- أزرار القنوات والروابط -->
+      <div class="space-y-3 relative z-10 mb-5">
+        <!-- قناة التليجرام -->
+        <a href="intent://resolve?domain=kin_k2#Intent;scheme=tg;package=org.telegram.messenger;end" target="_top" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/70 hover:bg-blue-600/20 border border-slate-700/60 hover:border-blue-500/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.99-1.73 6.66-2.87 8.02-3.44 3.82-1.59 4.61-1.87 5.13-1.88.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.14-.03.22z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-blue-300">قناة التليجرام الرسمية</p>
+              <p class="text-[10px] text-slate-400">@kin_k2</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-blue-400"></i>
+        </a>
+
+        <!-- مجموعة الفيس بوك -->
+        <a href="https://www.facebook.com/share/g/1ByVs56ujQ/" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/70 hover:bg-blue-700/20 border border-slate-700/60 hover:border-blue-600/50 transition group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center text-blue-500 group-hover:scale-110 transition">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold text-slate-100 group-hover:text-blue-400">مجموعة الفيس بوك الرسمية</p>
+              <p class="text-[10px] text-slate-400">تفاعل واستفسر مع زملائك الطلاب</p>
+            </div>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-blue-500"></i>
+        </a>
+      </div>
+
+      <!-- خيار عدم الإظهار مرة أخرى وزر التخطي -->
+      <div class="space-y-3 relative z-10 pt-2 border-t border-slate-800/80">
+        <label class="flex items-center gap-2.5 cursor-pointer select-none">
+          <input type="checkbox" id="dont-show-welcome-checkbox" class="w-4 h-4 rounded border-slate-700 bg-slate-800 text-amber-500 focus:ring-amber-500/20 focus:ring-offset-slate-900 cursor-pointer" />
+          <span class="text-xs text-slate-300 font-medium">لا تريد المشاهدة مرة أخرى</span>
+        </label>
+
+        <button onclick="closeWelcomeModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2">
+          <span>تخطي والدخول للمنصة</span>
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== النوافذ المنبثقة الحالية ==================== -->
   <div id="director-modal-overlay" onclick="closeDirectorModal()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[80] opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div id="director-modal" onclick="event.stopPropagation()" class="w-full max-w-md bg-slate-900/95 border border-amber-500/30 rounded-t-[32px] sm:rounded-3xl p-6 shadow-2xl shadow-amber-500/10 translate-y-full sm:translate-y-10 transition-transform duration-300 ease-out space-y-5 relative overflow-hidden">
       <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -597,6 +663,40 @@
   <!-- ==================== 7. السكربتات والبرمجيات العامة ==================== -->
   <script>
     lucide.createIcons();
+
+    /* ----- منطق نافذة الترحيب التلقائية عند الفتح ----- */
+    window.addEventListener('DOMContentLoaded', () => {
+      const hideWelcome = localStorage.getItem('hide_welcome_modal');
+      if (!hideWelcome) {
+        setTimeout(() => {
+          const overlay = document.getElementById('welcome-modal-overlay');
+          const modal = document.getElementById('welcome-modal');
+          if (overlay && modal) {
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100', 'pointer-events-auto');
+            modal.classList.remove('scale-95');
+            modal.classList.add('scale-100');
+            lucide.createIcons();
+          }
+        }, 600);
+      }
+    });
+
+    function closeWelcomeModal() {
+      const checkbox = document.getElementById('dont-show-welcome-checkbox');
+      if (checkbox && checkbox.checked) {
+        localStorage.setItem('hide_welcome_modal', 'true');
+      }
+
+      const overlay = document.getElementById('welcome-modal-overlay');
+      const modal = document.getElementById('welcome-modal');
+      if (overlay && modal) {
+        overlay.classList.remove('opacity-100', 'pointer-events-auto');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        modal.classList.remove('scale-100');
+        modal.classList.add('scale-95');
+      }
+    }
 
     /* ----- إعدادات قاعدة بيانات Firebase لعداد الزيارات الحقيقي ----- */
     const firebaseConfig = {
