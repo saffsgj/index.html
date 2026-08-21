@@ -85,7 +85,7 @@
 <body class="bg-slate-950 text-slate-100 h-[100dvh] flex flex-col justify-between overflow-hidden selection:bg-amber-500 selection:text-slate-950 w-full relative">
 
   <!-- ==================== إشعار حالة الاتصال بالإنترنت ==================== -->
-  <div id="network-status-toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ease-out translate-y-[-150%] opacity-0 pointer-events-none w-[90%] max-w-sm">
+  <div id="network-status-toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[110] transition-all duration-500 ease-out translate-y-[-150%] opacity-0 pointer-events-none w-[90%] max-w-sm">
     <div id="network-toast-bg" class="bg-slate-900/95 backdrop-blur-xl border rounded-2xl p-4 shadow-2xl flex items-center gap-3">
       <div id="network-icon-container" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors">
         <i data-lucide="wifi-off" id="network-icon" class="w-5 h-5"></i>
@@ -132,19 +132,16 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <!-- عداد الزيارات في الهيدر (يظهر حصرياً في الصفحة الرئيسية) -->
         <div id="header-visitor-count" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 shadow-sm transition-all duration-300">
           <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i>
           <span id="header-visitor-num" class="font-bold text-[11px] tracking-wide">...</span>
         </div>
 
-        <!-- زر التكبير الخاص بالصفحات المضمنة -->
         <button id="header-fullscreen-btn" onclick="toggleAppFullscreen()" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 transition-all active:scale-95 shadow-inner">
           <span class="text-[11px] font-bold">تكبير </span>
           <i data-lucide="maximize" id="header-fullscreen-icon" class="w-3.5 h-3.5"></i>
         </button>
 
-        <!-- زر فتح القائمة الجانبية -->
         <button onclick="openMenu()" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/50 text-slate-200 transition-all active:scale-95 shadow-inner">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -157,10 +154,10 @@
   <main id="main-content" class="w-full flex-1 flex flex-col overflow-hidden relative my-auto transition-all duration-300">
 
     <!-- ---------- 1. صفحة الرئيسية ---------- -->
-    <div id="page-home" class="page-section space-y-6 pt-6 px-4 overflow-y-auto pb-10">
+    <div id="page-home" class="page-section space-y-6 pt-6 overflow-y-auto pb-10 custom-scrollbar">
       
       <!-- حاوية السلايدر -->
-      <div class="card-slider-wrapper relative">
+      <div class="card-slider-wrapper relative px-4">
         
         <!-- 👑 الشريحة الأولى: بطاقة المدير -->
         <section class="card-slide active relative group rounded-3xl p-[2px] bg-gradient-to-b from-amber-400 via-orange-500/40 to-slate-800 shadow-2xl shadow-amber-500/10 overflow-hidden">
@@ -254,13 +251,28 @@
         <button id="dot-1" class="w-1.5 h-1.5 rounded-full bg-slate-700 transition-all duration-500"></button>
       </div>
       
-      <!-- رسالة ترحيبية -->
-      <div class="p-6 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/30 flex flex-col items-center text-center mt-6">
-        <div class="w-14 h-14 rounded-full bg-amber-500/10 flex items-center justify-center mb-3">
-          <i data-lucide="rocket" class="w-7 h-7 text-amber-500"></i>
+      <!-- إعلان مدمج في الصفحة الرئيسية (الصورة كاملة والنصوص بالأسفل) -->
+      <div class="w-full bg-slate-900 border-y border-slate-800/80 shadow-[0_0_40px_rgba(0,0,0,0.5)] mt-6 overflow-hidden">
+        
+        <!-- حاوية الصورة (تظهر كاملة وبدون أي قص أو تداخل) -->
+        <div class="w-full bg-slate-950 p-4 flex items-center justify-center">
+          <img src="https://up6.cc/2026/08/178732319821771.jpg" alt="إعلان المهندس سيف السوداني" class="w-full max-h-[380px] object-contain rounded-xl shadow-lg" />
         </div>
-        <h3 class="text-sm font-bold text-slate-200">أهلاً بك في منصة منقذ المهني</h3>
-        <p class="text-[11px] text-slate-400 mt-2">يمكنك التنقل بين أقسام المنصة والمكتبة والملتقى بكل سهولة من خلال القائمة السفلية أو الجانبية.</p>
+        
+        <!-- محتوى الإعلان (تحت الصورة تماماً في صندوق مستقل) -->
+        <div class="w-full p-5 bg-slate-900 border-t border-slate-800/60">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 mb-3 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+            <i data-lucide="megaphone" class="w-3 h-3"></i> إعلان مميز
+          </div>
+          <h3 class="text-xl font-black text-white mb-2 leading-tight">قناة المهندس سيف السوداني</h3>
+          <p class="text-[11px] text-slate-300 leading-relaxed mb-5">
+            اهلا بطلاب الصف الثالث المهني الاعزاء بقناة المهندس سيف السوداني كل مايخص (الرياضيات-الطبيعيات-العلوم الصناعية-الرسم صناعي-الذكاء الاصطناعي -نظم التشفير-التحقيق الجنائي الرقمي) من ملازم-مرشحات-دورات تقوية.
+          </p>
+          <a href="intent://resolve?domain=saifalsudany#Intent;scheme=tg;package=org.telegram.messenger;end" target="_top" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-extrabold text-xs shadow-lg shadow-blue-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            معرفة المزيد والانضمام للقناة
+          </a>
+        </div>
       </div>
 
     </div>
@@ -407,7 +419,7 @@
           </button>
 
           <!-- فتح رابط المكتبة خارجياً -->
-          <button id="menu-item-books" onclick="window.open('https://sites.google.com/view/ff7y/%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3-%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A', '_blank'); closeMenu();" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
+          <button id="menu-item-books" onclick="window.open('https://mihnie.netlify.app/', '_blank'); closeMenu();" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
             <div class="flex items-center gap-3">
               <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="book-open" class="w-4 h-4"></i></div>
               <span class="text-xs font-bold">المكتبة والملازم</span>
@@ -465,73 +477,7 @@
     </div>
   </aside>
 
-  <!-- ==================== نافذة الترحيب وانضمام للقنوات (الجديدة) ==================== -->
-  <div id="welcome-modal-overlay" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[90] flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
-    <div id="welcome-modal" class="w-full max-w-md bg-slate-900/95 border border-amber-500/40 rounded-3xl p-6 shadow-2xl shadow-amber-500/20 transform scale-95 transition-all duration-300 relative overflow-hidden">
-      <!-- خلفية متوهجة -->
-      <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
-      <!-- رأس النافذة -->
-      <div class="text-center relative z-10 mb-5">
-        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-400 p-[2px] shadow-xl shadow-amber-500/20 mb-3">
-          <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-amber-400">
-            <i data-lucide="sparkles" class="w-8 h-8"></i>
-          </div>
-        </div>
-        <h3 class="text-lg font-extrabold bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-          مرحباً بك في منصة منقذ المهني! 🎓
-        </h3>
-        <p class="text-xs text-slate-400 mt-1">انضم إلى مجتمعنا الرسمي لتصلك أحدث التبليغات، الملازم، والامتحانات أولاً بأول.</p>
-      </div>
-
-      <!-- أزرار القنوات والروابط -->
-      <div class="space-y-3 relative z-10 mb-5">
-        <!-- قناة التليجرام -->
-        <a href="intent://resolve?domain=kin_k2#Intent;scheme=tg;package=org.telegram.messenger;end" target="_top" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/70 hover:bg-blue-600/20 border border-slate-700/60 hover:border-blue-500/50 transition group">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.99-1.73 6.66-2.87 8.02-3.44 3.82-1.59 4.61-1.87 5.13-1.88.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.14-.03.22z"/></svg>
-            </div>
-            <div>
-              <p class="text-xs font-extrabold text-slate-100 group-hover:text-blue-300">قناة التليجرام الرسمية</p>
-              <p class="text-[10px] text-slate-400">@kin_k2</p>
-            </div>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-blue-400"></i>
-        </a>
-
-        <!-- مجموعة الفيس بوك -->
-        <a href="intent://www.facebook.com/share/g/1ByVs56ujQ/#Intent;package=com.facebook.katana;scheme=https;end" target="_top" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/70 hover:bg-blue-700/20 border border-slate-700/60 hover:border-blue-600/50 transition group">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center text-blue-500 group-hover:scale-110 transition">
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </div>
-            <div>
-              <p class="text-xs font-extrabold text-slate-100 group-hover:text-blue-400">مجموعة الفيس بوك الرسمية</p>
-              <p class="text-[10px] text-slate-400">تفاعل واستفسر مع زملائك الطلاب</p>
-            </div>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-slate-500 group-hover:text-blue-500"></i>
-        </a>
-      </div>
-
-      <!-- خيار عدم الإظهار مرة أخرى وزر التخطي -->
-      <div class="space-y-3 relative z-10 pt-2 border-t border-slate-800/80">
-        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-          <input type="checkbox" id="dont-show-welcome-checkbox" class="w-4 h-4 rounded border-slate-700 bg-slate-800 text-amber-500 focus:ring-amber-500/20 focus:ring-offset-slate-900 cursor-pointer" />
-          <span class="text-xs text-slate-300 font-medium">لا تريد المشاهدة مرة أخرى</span>
-        </label>
-
-        <button onclick="closeWelcomeModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2">
-          <span>تخطي والدخول للمنصة</span>
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== النوافذ المنبثقة الحالية ==================== -->
+  <!-- ==================== النوافذ المنبثقة الحالية (المدير والمطور) ==================== -->
   <div id="director-modal-overlay" onclick="closeDirectorModal()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[80] opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div id="director-modal" onclick="event.stopPropagation()" class="w-full max-w-md bg-slate-900/95 border border-amber-500/30 rounded-t-[32px] sm:rounded-3xl p-6 shadow-2xl shadow-amber-500/10 translate-y-full sm:translate-y-10 transition-transform duration-300 ease-out space-y-5 relative overflow-hidden">
       <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -660,41 +606,79 @@
     </div>
   </div>
 
+  <!-- ==================== نافذة الإعلان المنبثق ملء الشاشة (Popup Ad) ==================== -->
+  <div id="fullscreen-ad-popup" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col justify-center items-center transition-opacity duration-500 opacity-100 pointer-events-auto">
+    <!-- زر التخطي (في أعلى الشاشة) -->
+    <div class="absolute top-8 left-4 z-50">
+      <button id="skip-ad-btn" disabled class="px-5 py-2.5 rounded-full bg-slate-800/80 text-slate-400 text-[11px] font-bold border border-slate-700 backdrop-blur-md flex items-center gap-2 transition-all">
+        انتظر <span id="skip-timer" class="text-blue-400 font-black text-sm w-3 text-center">5</span> ثواني
+      </button>
+    </div>
+
+    <!-- حاوية محتوى الإعلان -->
+    <div class="w-full h-full flex flex-col relative overflow-hidden">
+      <!-- تأثير ضبابي للصورة في الخلفية -->
+      <img src="https://up6.cc/2026/08/178732319821771.jpg" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110 pointer-events-none" />
+
+      <!-- عرض الصورة الرئيسية كاملة بدون اقتصاص -->
+      <div class="flex-1 w-full relative z-10 flex items-center justify-center mt-12 px-4 py-4">
+        <img src="https://up6.cc/2026/08/178732319821771.jpg" class="w-full h-full max-h-[50vh] object-contain rounded-2xl shadow-2xl drop-shadow-2xl" alt="إعلان" />
+      </div>
+
+      <!-- النص والتفاصيل السفلية -->
+      <div class="w-full bg-gradient-to-t from-slate-950 via-slate-900 to-slate-900/90 p-6 z-20 pb-12 rounded-t-[30px] border-t border-slate-800/50 relative shadow-[0_-10px_40px_rgba(0,0,0,0.6)]">
+        <div class="flex justify-center -mt-12 mb-4">
+          <div class="w-14 h-14 bg-gradient-to-tr from-blue-500 to-sky-500 rounded-full flex items-center justify-center border-[4px] border-slate-950 shadow-lg shadow-blue-500/30">
+            <i data-lucide="megaphone" class="w-6 h-6 text-white"></i>
+          </div>
+        </div>
+        <h3 class="text-center text-xl font-black text-slate-100 mb-2">المهندس سيف السوداني</h3>
+        <p class="text-center text-[12px] text-slate-300 leading-relaxed mb-6">
+          اهلا بطلاب الصف الثالث المهني الاعزاء بقناة المهندس سيف السوداني كل مايخص (الرياضيات-الطبيعيات-العلوم الصناعية-الرسم صناعي-الذكاء الاصطناعي -نظم التشفير-التحقيق الجنائي الرقمي) من ملازم-مرشحات-دورات تقوية.
+        </p>
+        <a href="intent://resolve?domain=saifalsudany#Intent;scheme=tg;package=org.telegram.messenger;end" target="_top" onclick="closeAdPopup()" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-extrabold text-sm shadow-xl shadow-blue-500/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+          <i data-lucide="external-link" class="w-5 h-5"></i>
+          معرفة المزيد والانضمام للقناة
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== 7. السكربتات والبرمجيات العامة ==================== -->
   <script>
     lucide.createIcons();
 
-    /* ----- منطق نافذة الترحيب التلقائية عند الفتح ----- */
+    /* ----- منطق الإعلان المنبثق وعداد التخطي ----- */
     window.addEventListener('DOMContentLoaded', () => {
-      const hideWelcome = localStorage.getItem('hide_welcome_modal');
-      if (!hideWelcome) {
-        setTimeout(() => {
-          const overlay = document.getElementById('welcome-modal-overlay');
-          const modal = document.getElementById('welcome-modal');
-          if (overlay && modal) {
-            overlay.classList.remove('opacity-0', 'pointer-events-none');
-            overlay.classList.add('opacity-100', 'pointer-events-auto');
-            modal.classList.remove('scale-95');
-            modal.classList.add('scale-100');
+      let timeLeft = 5;
+      const skipBtn = document.getElementById('skip-ad-btn');
+      const timerSpan = document.getElementById('skip-timer');
+
+      const adTimer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          if (timerSpan) timerSpan.innerText = timeLeft;
+        } else {
+          clearInterval(adTimer);
+          if (skipBtn) {
+            skipBtn.removeAttribute('disabled');
+            skipBtn.innerHTML = 'تخطي الإعلان <i data-lucide="x" class="w-4 h-4 ml-1"></i>';
+            skipBtn.classList.remove('text-slate-400', 'bg-slate-800/80');
+            skipBtn.classList.add('text-white', 'bg-slate-700/90', 'hover:bg-slate-600', 'cursor-pointer', 'shadow-lg');
+            skipBtn.onclick = closeAdPopup;
             lucide.createIcons();
           }
-        }, 600);
-      }
+        }
+      }, 1000);
     });
 
-    function closeWelcomeModal() {
-      const checkbox = document.getElementById('dont-show-welcome-checkbox');
-      if (checkbox && checkbox.checked) {
-        localStorage.setItem('hide_welcome_modal', 'true');
-      }
-
-      const overlay = document.getElementById('welcome-modal-overlay');
-      const modal = document.getElementById('welcome-modal');
-      if (overlay && modal) {
-        overlay.classList.remove('opacity-100', 'pointer-events-auto');
-        overlay.classList.add('opacity-0', 'pointer-events-none');
-        modal.classList.remove('scale-100');
-        modal.classList.add('scale-95');
+    function closeAdPopup() {
+      const adPopup = document.getElementById('fullscreen-ad-popup');
+      if (adPopup) {
+        adPopup.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          adPopup.remove(); 
+        }, 500);
       }
     }
 
@@ -896,7 +880,6 @@
         document.getElementById('header-page-subtitle').innerHTML = pageMeta[tabKey].subtitle;
       }
 
-      // التحكم في ظهور عداد الزيارات في الشريط العلوي (الهيدر) فقط في الصفحة الرئيسية
       const headerVisitorEl = document.getElementById('header-visitor-count');
       if (headerVisitorEl) {
         if (tabKey === 'home') {
