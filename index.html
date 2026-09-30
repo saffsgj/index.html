@@ -5,31 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
   
   <!-- ==================== أكواد تحسين محركات البحث (SEO) ==================== -->
-  <!-- إثبات ملكية الموقع في Google Search Console -->
   <meta name="google-site-verification" content="s0he5xnGFxUE7yahHKEp7J2kX_MUJt1xjIGH1RDc4_0" />
-  
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- العنوان الشامل والمحسن لمحركات البحث -->
-  <title>كتب المهني | تحميل كتب وملازم ونتائج التعليم المهني - منصة منقذ المهني - نتائج المهني 2026</title>
-
-  <!-- الوصف المحسن لمحركات البحث -->
+  <title>كتب المهني | تحميل كتب وملازم ونتائج التعليم المهني - منصة منقذ المهني</title>
   <meta name="description" content="أكبر منصة عراقية لطلاب التعليم المهني. الشبكة التي أسسناها تتيح لكل ابن المهني تحميل الملازم والكتب، مشاهدة المحاضرات، ومعرفة نتائج المهني وجدول الامتحانات للدور الأول والثاني. دليلك الشامل لقبولات الأقسام والفروع لطلاب السادس المهني، والثالث، والثاني، والأول مهني، بما فيها الفرع الصناعي وكافة الفروع الأخرى.">
-
-  <!-- الكلمات المفتاحية الشاملة والمحدثة -->
   <meta name="keywords" content="كتب المهني, تحميل كتب المهني, ملازم كتب المهني, نتائج المهني, منقذ المهني, ملازم المهني, نتائج المهني الدور الاول, نتائج المهني الدور الثاني, قبولات المهني, جدول امتحانات المهني, السادس مهني, الثالث مهني, الفرع الصناعي, تعليم مهني العراق">
-
-  <!-- أوامر السماح لعناكب جوجل بأرشفة وتتبع الموقع -->
   <meta name="robots" content="index, follow">
-
-  <!-- تحسينات معاينة الرابط عند نشره في تليجرام، فيسبوك، وواتساب -->
   <meta property="og:title" content="كتب المهني وملازمها | منصة منقذ المهني للتعليم المهني">
   <meta property="og:description" content="الشبكة التي أسسناها لتكون منصتك الشاملة لكل ما يخص التعليم المهني: تحميل كتب المهني والملازم، النتائج، وجداول الامتحانات لجميع المراحل والفروع.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.mnkzalmahni.com">
-</head>
 
   <!-- ========================================================================= -->
 
@@ -49,6 +33,11 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
   <style>
+    /* حل مشكلة الوميض (الرمش) في الايفونات عند اللمس */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     html, body {
       height: 100vh;
       height: 100dvh;
@@ -63,6 +52,14 @@
       overflow-x: hidden; 
     }
     
+    /* تسريع الرسوميات ومنع تقطيع الانميشن في هواتف ابل */
+    .nav-tab, #tab-chat, .sidebar-nav-btn {
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
     /* حركات الخلفية المتحركة */
     @keyframes floatUp {
       0% { transform: translateY(100px) scale(0.8) rotate(0deg); opacity: 0; }
@@ -136,7 +133,7 @@
         <div class="relative">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-300 p-[2px] shadow-lg shadow-amber-500/20">
             <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-black text-amber-400 text-lg">
-              م
+             📚
             </div>
           </div>
           <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
@@ -148,7 +145,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="font-extrabold text-base bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              منصة منقذ المهني
+               منقذ المهني
             </h1>
           </div>
           <p class="text-xs text-slate-400 flex items-center gap-1">
@@ -278,39 +275,46 @@
         <button id="dot-0" class="w-4 h-1.5 rounded-full bg-amber-500 transition-all duration-500"></button>
         <button id="dot-1" class="w-1.5 h-1.5 rounded-full bg-slate-700 transition-all duration-500"></button>
       </div>
-      
-      <!-- ================== قسم المتجر الرقمي (المضمن) ================== -->
-      <div id="market-container" class="-mx-4 w-[calc(100%+2rem)] flex flex-col relative bg-slate-900 border-t border-b border-slate-800/80 shadow-[0_-10px_40px_rgba(0,0,0,0.4)] transition-all duration-300 z-10 h-[85vh]">
+
+      <!-- ==================== البطاقات الجديدة أسفل السلايدر ==================== -->
+      <div class="grid grid-cols-2 gap-3 mt-6">
         
-        <!-- شريط علوي للماركت (غير لاصق عند النزول، ثبات طبيعي) -->
-        <div class="bg-slate-950/95 border-b border-slate-800/80 px-4 py-3 flex items-center justify-between shadow-md">
+        <!-- بطاقة المحاضرات المجانية -->
+        <button onclick="switchTab('lectures')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
           
-          <div class="flex items-center gap-2">
-            <span class="relative flex h-2.5 w-2.5 shrink-0">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
-            </span>
-            <p class="text-[11px] text-indigo-300 font-bold leading-tight">نصيحة: اضغط على التكبير لتجربة أفضل</p>
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[1px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+            <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-emerald-400">
+              <i data-lucide="monitor-play" class="w-6 h-6"></i>
+            </div>
           </div>
           
-          <div class="flex items-center gap-2">
-            <!-- سهم يشير إلى زر التكبير -->
-            <i data-lucide="arrow-left" class="w-4 h-4 text-indigo-400 animate-pulse"></i>
-            
-            <button onclick="toggleMarketFullscreen()" class="p-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 transition-all active:scale-95 shadow-inner flex items-center justify-center group">
-              <i data-lucide="maximize" id="market-maximize-icon" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-            </button>
+          <h3 class="text-sm font-extrabold text-slate-100 z-10">المحاضرات</h3>
+          <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
+            <span id="dynamic-lectures-text" class="text-[10px] text-emerald-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">محاضرات مجانية</span>
           </div>
+        </button>
 
-        </div>
+        <!-- بطاقة ماركت المهني -->
+        <button onclick="switchTab('market')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute -top-10 -left-10 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
-        <!-- كود تضمين الموقع Iframe -->
-        <div class="flex-1 w-full h-full relative bg-slate-950 overflow-hidden">
-          <iframe src="https://123-pied-kappa.vercel.app/" class="absolute inset-0 w-full h-full border-0" title="المتجر الرقمي" allowfullscreen></iframe>
-        </div>
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-400 to-pink-500 p-[1px] shadow-lg shadow-purple-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+            <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-purple-400">
+              <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+            </div>
+          </div>
+          
+          <h3 class="text-sm font-extrabold text-slate-100 z-10">ماركت المهني</h3>
+          <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
+            <span id="dynamic-market-text" class="text-[10px] text-purple-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">تسوق كتب</span>
+          </div>
+        </button>
         
       </div>
-      <!-- ================== نهاية المتجر ================== -->
+      <!-- ==================================================================== -->
 
     </div>
 
@@ -323,55 +327,87 @@
       </button>
 
       <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
-        <iframe src="https://nsbxje.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
+        <iframe src="https://2-2-steel.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
       </div>
     </div>
 
     <!-- ---------- 3. صفحة الملتقى ---------- -->
-    <div id="page-chat" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative">
+    <div id="page-chat" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
       
-      <button id="chat-floating-minimize-btn" onclick="toggleAppFullscreen()" class="hidden absolute top-4 left-4 z-[60] flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-xl border border-amber-500/50 text-amber-400 shadow-xl transition-all active:scale-95 hover:bg-amber-500/20">
-        <span class="text-[11px] font-bold">تصغير </span>
-        <i data-lucide="minimize" class="w-3.5 h-3.5"></i>
-      </button>
+      <!-- شريط علوي صغير للرجوع للرئيسية لا يغطي المحتوى -->
+      <div id="chat-top-bar" class="hidden w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-2.5 flex items-center shrink-0 z-[60] shadow-md shadow-black/30">
+        <button onclick="exitChatFullscreen()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700/50 text-amber-400 transition-all active:scale-95 shadow-sm">
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          <span class="text-[11px] font-bold">رجوع للرئيسية</span>
+        </button>
+        <div class="mr-auto ml-2 flex items-center gap-2">
+           <span class="text-slate-400 text-[10px] font-bold">  ابـــــــــــــــــــــــــن                                                  الـــــمـــــهـــــــــنــــــي</span>
+           <span class="flex h-2.5 w-2.5 relative">
+             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+           </span>
+        </div>
+      </div>
 
-      <div id="chat-iframe-container" class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative transition-all duration-300">
-        <iframe src="https://sshat.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="الملتقى الرقمي"></iframe>
+      <!-- إطار الملتقى يأخذ المساحة المتبقية فقط -->
+      <div id="chat-iframe-container" class="flex-1 w-full h-full overflow-hidden relative transition-all duration-300">
+        <iframe src="https://shat1-beta.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="الملتقى الرقمي"></iframe>
       </div>
       
     </div>
 
-    <!-- ---------- 4. صفحة المحاضرات ---------- -->
-    <div id="page-lectures" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
+    <!-- ---------- 4. صفحة الماركت والتسوق ---------- -->
+    <div id="page-market" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
       
-      <button id="lectures-floating-minimize-btn" onclick="toggleAppFullscreen()" class="hidden absolute top-[85px] left-4 z-[100] flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-xl border border-cyan-500/50 text-cyan-300 shadow-xl hover:bg-slate-800 transition-all active:scale-95">
-        <span class="text-[11px] font-bold">تصغير</span>
-        <i data-lucide="minimize-2" class="w-3.5 h-3.5"></i>
-      </button>
+
 
       <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
         <iframe 
-          src="https://aaa1-eight.vercel.app/" 
+          src="https://18-omega-gules.vercel.app/" 
           class="w-full h-full border-0 absolute inset-0" 
-          title="المحاضرات والدروس"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          title="المتجر الرقمي"
           allowfullscreen>
         </iframe>
       </div>
     </div>
     
+    <!-- ---------- 5. صفحة المحاضرات (تضمين) ---------- -->
+    <div id="page-lectures" class="page-section hidden flex-col h-full w-full transition-all duration-300 relative bg-slate-900">
+      
+      <!-- شريط علوي صغير للرجوع للرئيسية لا يغطي المحتوى -->
+      <div id="lectures-top-bar" class="hidden w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-2.5 flex items-center shrink-0 z-[60] shadow-md shadow-black/30">
+        <button onclick="exitLecturesFullscreen()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700/50 text-emerald-400 transition-all active:scale-95 shadow-sm">
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          <span class="text-[11px] font-bold">رجوع للرئيسية</span>
+        </button>
+        <div class="mr-auto ml-2 flex items-center gap-2">
+           <span class="text-slate-400 text-[10px] font-bold">المحاضرات المجانية</span>
+           <i data-lucide="monitor-play" class="w-3.5 h-3.5 text-emerald-500"></i>
+        </div>
+      </div>
+
+      <!-- إطار المحاضرات -->
+      <div class="flex-1 w-full h-full overflow-hidden relative transition-all duration-300">
+        <iframe src="https://aaa1-eight.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="المحاضرات المجانية"></iframe>
+      </div>
+      
+    </div>
+
   </main>
 
   <!-- ==================== 3. القائمة السفلية ==================== -->
   <nav id="bottom-nav" class="sticky bottom-0 left-0 right-0 z-40 backdrop-blur-xl bg-slate-900/85 border-t border-slate-800/80 px-4 py-2.5 shrink-0 transition-all duration-300 w-full">
-    <div class="w-full mx-auto flex items-center justify-between">
+    <div class="w-full mx-auto flex items-center justify-evenly">
       
-      <button id="tab-home" onclick="switchTab('home')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-amber-400 font-bold scale-105">
+      <button id="tab-home" onclick="switchTab('home')" class="nav-tab flex-1 flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-amber-400 font-bold scale-105">
         <i data-lucide="home" class="w-6 h-6"></i><span class="text-[10px]">الرئيسية</span><span class="tab-indicator absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
       </button>
       
-      <button id="tab-books" onclick="window.open('https://sites.google.com/view/ff7y/%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3-%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A', '_blank')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
-        <i data-lucide="book-open" class="w-6 h-6"></i><span class="text-[10px]">الكتب والملازم</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
+      <!-- زر المكتبة المعدل مع الحركة التلقائية -->
+      <button id="tab-books" onclick="window.open('https://sites.google.com/view/ff7y/%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3-%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A', '_blank')" class="nav-tab flex-1 flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200 overflow-hidden">
+        <i data-lucide="book-open" class="w-6 h-6 z-10 relative transition-all duration-300"></i>
+        <span id="dynamic-library-text" class="text-[10px] transition-all duration-300 ease-in-out transform translate-y-0 opacity-100 min-w-[45px] text-center font-semibold block">المكتبة</span>
+        <span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
       </button>
 
       <!-- زر الملتقى -->
@@ -384,11 +420,12 @@
         </span>
       </button>
 
-      <button id="tab-lectures" onclick="switchTab('lectures')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
-        <i data-lucide="monitor-play" class="w-6 h-6"></i><span class="text-[10px]">المحاضرات</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
+      <!-- زر الماركت -->
+      <button id="tab-market" onclick="switchTab('market')" class="nav-tab flex-1 flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
+        <i data-lucide="shopping-bag" class="w-6 h-6"></i><span class="text-[10px]">التسوق</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
       </button>
       
-      <button id="tab-sections" onclick="switchTab('sections')" class="nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
+      <button id="tab-sections" onclick="switchTab('sections')" class="nav-tab flex-1 flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200">
         <i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[10px]">الأقسام</span><span class="tab-indicator hidden absolute -bottom-1 w-5 h-0.5 bg-amber-400 rounded-full shadow-lg shadow-amber-400"></span>
       </button>
 
@@ -462,10 +499,10 @@
             <span class="sidebar-active-badge hidden w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
           </button>
 
-          <button id="menu-item-lectures" onclick="navigateFromMenu('lectures')" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
+          <button id="menu-item-market" onclick="navigateFromMenu('market')" class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl transition-all group">
             <div class="flex items-center gap-3">
-              <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="monitor-play" class="w-4 h-4"></i></div>
-              <span class="text-xs font-bold">الدروس المرئية</span>
+              <div class="sidebar-icon-box p-2 rounded-xl transition-colors"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
+              <span class="text-xs font-bold">ماركت المهني</span>
             </div>
             <span class="sidebar-active-badge hidden w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-400"></span>
           </button>
@@ -474,7 +511,7 @@
 
       <div>
         <p class="px-2 mb-2 text-[10px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-          <span>🛠️</span> الخدمات والتواصل
+          <span>🛠️️</span> الخدمات والتواصل
         </p>
         <div class="space-y-1.5">
           <button onclick="openDevModal(); closeMenu();" class="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-slate-300 hover:bg-slate-800/80 hover:text-emerald-400 transition-all border border-transparent hover:border-slate-700/50 group">
@@ -576,7 +613,7 @@
   <!-- ==================== النوافذ المنبثقة الحالية ==================== -->
   <div id="director-modal-overlay" onclick="closeDirectorModal()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[80] opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div id="director-modal" onclick="event.stopPropagation()" class="w-full max-w-md bg-slate-900/95 border border-amber-500/30 rounded-t-[32px] sm:rounded-3xl p-6 shadow-2xl shadow-amber-500/10 translate-y-full sm:translate-y-10 transition-transform duration-300 ease-out space-y-5 relative overflow-hidden">
-      <!-- (محتوى نافذة المدير - لم يتغير) -->
+      <!-- (محتوى نافذة المدير) -->
       <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
@@ -647,7 +684,7 @@
 
   <div id="dev-modal-overlay" onclick="closeDevModal()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[80] opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div id="dev-modal" onclick="event.stopPropagation()" class="w-full max-w-md bg-slate-900/95 border border-cyan-500/30 rounded-t-[32px] sm:rounded-3xl p-6 shadow-2xl shadow-cyan-500/10 translate-y-full sm:translate-y-10 transition-transform duration-300 ease-out space-y-5 relative overflow-hidden">
-      <!-- (محتوى نافذة المطور - لم يتغير) -->
+      <!-- (محتوى نافذة المطور) -->
       <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
@@ -664,10 +701,11 @@
       </div>
 
       <div class="space-y-3 relative z-10">
+        <!-- تم حل مشكلة أيقونة الانستجرام هنا عن طريق استخدام كود SVG مباشر -->
         <a href="intent://instagram.com/_u/1.c.1s#Intent;package=com.instagram.android;scheme=https;end" target="_top" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-pink-600/20 border border-slate-700/60 hover:border-pink-500/50 transition group">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition">
-              <i data-lucide="instagram" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
             </div>
             <div>
               <p class="text-xs font-extrabold text-slate-100 group-hover:text-pink-300">الحساب الرسمي Instagram</p>
@@ -708,7 +746,7 @@
   <script>
     lucide.createIcons();
 
-    /* ----- منطق نافذة الترحيب التلقائية عند الفتح ----- */
+    /* ----- منطق نافذة الترحيب التلقائية عند الفتح مع History API ----- */
     window.addEventListener('DOMContentLoaded', () => {
       const hideWelcome = localStorage.getItem('hide_welcome_modal');
       if (!hideWelcome) {
@@ -723,6 +761,20 @@
             lucide.createIcons();
           }
         }, 600);
+      }
+      
+      // تعيين الحالة المبدئية لـ History API للتنقل بزر الرجوع (دائماً الرئيسية عند فتح التطبيق)
+      history.replaceState({ tab: 'home' }, '', window.location.pathname);
+    });
+
+    // مراقبة ضغط المستخدم على زر الرجوع الفعلي في هاتفه
+    window.addEventListener('popstate', (event) => {
+      // إذا كان هناك حالة سابقة مخزنة، نعيده للقسم المناسب
+      if (event.state && event.state.tab && event.state.tab !== 'home') {
+        switchTab(event.state.tab, true);
+      } else {
+        // في حال كانت الحالة هي الرئيسية أو غير موجودة، نرجعه للرئيسية
+        switchTab('home', true);
       }
     });
 
@@ -910,27 +962,37 @@
     }
     setInterval(showNextSlide, 6000);
 
-    /* ----- منطق تبديل الصفحات ----- */
+    /* ----- منطق تبديل الصفحات المتوافق بالكامل مع History API (زر الرجوع) ----- */
     let currentActiveTab = 'home';
     const pageMeta = {
       home: { name: 'الرئيسية', subtitle: 'نظرة عامة والمنصة' },
       sections: { name: 'أقسام المنصة', subtitle: 'تصفح جميع الأقسام' },
       chat: { name: 'الملتقى الرقمي', subtitle: '<span class="text-emerald-400 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span></span> نشط الآن </span>' },
-      lectures: { name: 'المحاضرات', subtitle: 'الدروس المرئية' }
+      market: { name: 'ماركت المهني', subtitle: 'المتجر الرقمي' },
+      lectures: { name: 'المحاضرات المجانية', subtitle: 'شروحات شاملة' }
     };
 
-    function switchTab(tabKey) {
+    function switchTab(tabKey, isPopState = false) {
+      const previousTab = currentActiveTab;
+
+      // السلوك الذكي لزر الرجوع: إذا اختار المستخدم زر الرئيسية وهو داخل قسم آخر، نقوم بالرجوع في السجل بدلاً من إضافة سجل جديد
+      if (tabKey === 'home' && previousTab !== 'home' && !isPopState) {
+        history.back(); // هذا سيفعل popstate تلقائياً
+        return; // الخروج من الدالة لأن مستمع popstate سيتكفل بالباقي
+      }
+
       currentActiveTab = tabKey;
       document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
       
       const targetPage = document.getElementById(`page-${tabKey}`);
       if (targetPage) {
         targetPage.classList.remove('hidden');
-        if (tabKey === 'chat' || tabKey === 'sections' || tabKey === 'lectures') {
+        if (tabKey === 'chat' || tabKey === 'sections' || tabKey === 'market' || tabKey === 'lectures') {
           targetPage.classList.add('flex');
         } else {
           document.getElementById('page-chat')?.classList.remove('flex');
           document.getElementById('page-sections')?.classList.remove('flex');
+          document.getElementById('page-market')?.classList.remove('flex');
           document.getElementById('page-lectures')?.classList.remove('flex');
         }
       }
@@ -951,29 +1013,44 @@
         }
       }
 
-      const fullscreenBtn = document.getElementById('header-fullscreen-btn');
-      
-      if (tabKey === 'chat' || tabKey === 'sections' || tabKey === 'lectures') {
-        if (fullscreenBtn) fullscreenBtn.classList.remove('hidden');
+      // إعداد الشاشة الكاملة للملتقى وقسم المحاضرات
+      if (tabKey === 'chat' || tabKey === 'lectures') {
+        if (!isAppFullscreen) toggleAppFullscreen(true);
       } else {
-        if (fullscreenBtn) fullscreenBtn.classList.add('hidden');
-        if (isAppFullscreen) toggleAppFullscreen();
+         const fullscreenBtn = document.getElementById('header-fullscreen-btn');
+         if (tabKey === 'sections' || tabKey === 'market') {
+           if (fullscreenBtn) fullscreenBtn.classList.remove('hidden');
+         } else {
+           if (fullscreenBtn) fullscreenBtn.classList.add('hidden');
+           if (isAppFullscreen) toggleAppFullscreen(false); 
+         }
       }
 
       document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.className = 'nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200';
+        tab.className = 'nav-tab flex-1 flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200 overflow-hidden';
         const indicator = tab.querySelector('.tab-indicator');
         if (indicator) indicator.classList.add('hidden');
       });
 
       const activeTabBtn = document.getElementById(`tab-${tabKey}`);
       if (activeTabBtn && tabKey !== 'chat') {
-        activeTabBtn.className = 'nav-tab flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-amber-400 font-bold scale-105';
+        activeTabBtn.className = 'nav-tab flex-1 flex flex-col items-center gap-1 transition-all duration-200 relative py-1 px-3 rounded-xl text-amber-400 font-bold scale-105 overflow-hidden';
         const activeIndicator = activeTabBtn.querySelector('.tab-indicator');
         if (activeIndicator) activeIndicator.classList.remove('hidden');
       }
 
       updateSidebarActive(tabKey);
+
+      // تسجيل المسار فقط إذا كان الانتقال إلى صفحة أخرى غير الرئيسية وبدون النقر على الرجوع في الهاتف
+      if (!isPopState && tabKey !== 'home') {
+        if (previousTab === 'home') {
+          // إذا كنا في الرئيسية وذهبنا لقسم، نضيف حالة
+          history.pushState({ tab: tabKey }, '', '#' + tabKey);
+        } else {
+          // إذا كنا في قسم وذهبنا لقسم آخر، نستبدل الحالة حتى لا يتراكم السجل (زر الرجوع سيعود للرئيسية دائماً)
+          history.replaceState({ tab: tabKey }, '', '#' + tabKey);
+        }
+      }
     }
 
     function updateSidebarActive(activeKey) {
@@ -1056,67 +1133,113 @@
     /* ----- منطق تكبير/تصغير التطبيقات العامة ----- */
     let isAppFullscreen = false;
 
-    window.toggleAppFullscreen = function() {
-      isAppFullscreen = !isAppFullscreen;
+    window.toggleAppFullscreen = function(forceFullscreen = null) {
+      if(forceFullscreen !== null) {
+        isAppFullscreen = forceFullscreen;
+      } else {
+        isAppFullscreen = !isAppFullscreen;
+      }
       
       const bottomNav = document.getElementById('bottom-nav'); 
       const mainHeader = document.getElementById('main-header');
       
-      const chatMinimizeBtn = document.getElementById('chat-floating-minimize-btn');
+      const chatTopBar = document.getElementById('chat-top-bar');
+      const lecturesTopBar = document.getElementById('lectures-top-bar');
       const sectionsMinimizeBtn = document.getElementById('sections-floating-minimize-btn');
-      const lecturesMinimizeBtn = document.getElementById('lectures-floating-minimize-btn');
+      const marketMinimizeBtn = document.getElementById('market-floating-minimize-btn');
 
       if (isAppFullscreen) {
         if(bottomNav) bottomNav.classList.add('hidden');
         if(mainHeader) mainHeader.classList.add('hidden');
         
-        if(currentActiveTab === 'chat' && chatMinimizeBtn) chatMinimizeBtn.classList.remove('hidden');
+        if(currentActiveTab === 'chat' && chatTopBar) chatTopBar.classList.remove('hidden');
+        if(currentActiveTab === 'lectures' && lecturesTopBar) lecturesTopBar.classList.remove('hidden');
         if(currentActiveTab === 'sections' && sectionsMinimizeBtn) sectionsMinimizeBtn.classList.remove('hidden');
-        if(currentActiveTab === 'lectures' && lecturesMinimizeBtn) lecturesMinimizeBtn.classList.remove('hidden');
+        if(currentActiveTab === 'market' && marketMinimizeBtn) marketMinimizeBtn.classList.remove('hidden');
       } else {
         if(bottomNav) bottomNav.classList.remove('hidden');
         if(mainHeader) mainHeader.classList.remove('hidden');
         
-        if(chatMinimizeBtn) chatMinimizeBtn.classList.add('hidden');
+        if(chatTopBar) chatTopBar.classList.add('hidden');
+        if(lecturesTopBar) lecturesTopBar.classList.add('hidden');
         if(sectionsMinimizeBtn) sectionsMinimizeBtn.classList.add('hidden');
-        if(lecturesMinimizeBtn) lecturesMinimizeBtn.classList.add('hidden');
+        if(marketMinimizeBtn) marketMinimizeBtn.classList.add('hidden');
       }
       
       lucide.createIcons();
     };
 
-    /* ----- برمجة المتجر الرقمي (Market) لملء الشاشة ----- */
-    let isMarketFullscreen = false;
-    window.toggleMarketFullscreen = function() {
-      isMarketFullscreen = !isMarketFullscreen;
-      
-      const marketContainer = document.getElementById('market-container');
-      const marketIcon = document.getElementById('market-maximize-icon');
-      const bottomNav = document.getElementById('bottom-nav');
-      const mainHeader = document.getElementById('main-header');
+    // دالة زر الرجوع من الملتقى
+    window.exitChatFullscreen = function() {
+      switchTab('home'); 
+    }
 
-      if (isMarketFullscreen) {
-        // وضع ملء الشاشة (Fullscreen)
-        marketContainer.classList.remove('relative', '-mx-4', 'w-[calc(100%+2rem)]', 'h-[85vh]', 'border-t', 'border-b');
-        marketContainer.classList.add('fixed', 'inset-0', 'z-[100]', 'w-full', 'h-[100dvh]');
-        
-        if(bottomNav) bottomNav.classList.add('hidden');
-        if(mainHeader) mainHeader.classList.add('hidden');
-        
-        marketIcon.setAttribute('data-lucide', 'minimize');
-      } else {
-        // العودة للوضع الطبيعي المدمج داخل الصفحة
-        marketContainer.classList.add('relative', '-mx-4', 'w-[calc(100%+2rem)]', 'h-[85vh]', 'border-t', 'border-b');
-        marketContainer.classList.remove('fixed', 'inset-0', 'z-[100]', 'w-full', 'h-[100dvh]');
-        
-        if(bottomNav) bottomNav.classList.remove('hidden');
-        if(mainHeader) mainHeader.classList.remove('hidden');
-        
-        marketIcon.setAttribute('data-lucide', 'maximize');
-      }
+    // دالة زر الرجوع من المحاضرات
+    window.exitLecturesFullscreen = function() {
+      switchTab('home'); 
+    }
+
+    /* ----- دالة حركة تغيير النصوص المحدثة والخالية من الأخطاء ----- */
+    function createTextAnimator(element, wordsArray, specialIcon = null) {
+      if (!element) return;
+      let currentIndex = 0;
       
-      lucide.createIcons();
-    };
+      setInterval(() => {
+        // تأثير الإخفاء
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(-10px) scale(0.95)';
+        
+        setTimeout(() => {
+          // تحديث الكلمة بعد أن تختفي
+          currentIndex = (currentIndex + 1) % wordsArray.length;
+          const newWord = wordsArray[currentIndex];
+          element.textContent = newWord;
+
+          // تأثير كلمة "مجاني" الخاص بزر المكتبة فقط
+          if (specialIcon) {
+            if (newWord.includes('مجاني')) {
+              element.classList.add('text-emerald-400', 'font-extrabold', 'animate-pulse');
+              specialIcon.classList.add('text-emerald-400', 'animate-bounce');
+            } else {
+              element.classList.remove('text-emerald-400', 'font-extrabold', 'animate-pulse');
+              specialIcon.classList.remove('text-emerald-400', 'animate-bounce');
+            }
+          }
+
+          // التجهيز للظهور من الأسفل
+          element.style.transition = 'none';
+          element.style.transform = 'translateY(10px) scale(0.95)';
+          
+          // إظهار الكلمة بنعومة
+          setTimeout(() => {
+            element.style.transition = 'all 0.3s ease-in-out';
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0) scale(1)';
+          }, 50);
+          
+        }, 300); // ينتظر 300ms حتى تنتهي حركة الإخفاء تماماً قبل تبديل النص
+      }, 3500); // يتم تغيير النص كل 3.5 ثانية
+    }
+
+    // تفعيل حركة النص لزر المكتبة (في الشريط السفلي)
+    createTextAnimator(
+      document.getElementById('dynamic-library-text'), 
+      ['المكتبة', 'الأسئلة', 'الوزاريات', 'الكتب', 'الملازم'], 
+      document.querySelector('#tab-books i')
+    );
+
+    // تفعيل حركة النص لبطاقة المحاضرات
+    createTextAnimator(
+      document.getElementById('dynamic-lectures-text'), 
+      ['محاضرات مجانية', 'أساتذة المهني', 'شروحات شاملة', 'دروس مكثفة']
+    );
+
+    // تفعيل حركة النص لبطاقة ماركت المهني
+    createTextAnimator(
+      document.getElementById('dynamic-market-text'), 
+      ['تسوق كتب', 'ملازم دراسية', 'بكجات الملازم', 'أدوات الرسم']
+    );
+
   </script>
 
 </body>
