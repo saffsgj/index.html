@@ -277,44 +277,68 @@
       </div>
 
       <!-- ==================== البطاقات الجديدة أسفل السلايدر ==================== -->
-      <div class="grid grid-cols-2 gap-3 mt-6">
-        
-        <!-- بطاقة المحاضرات المجانية -->
-        <button onclick="switchTab('lectures')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
-          
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[1px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
-            <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-emerald-400">
-              <i data-lucide="monitor-play" class="w-6 h-6"></i>
-            </div>
-          </div>
-          
-          <h3 class="text-sm font-extrabold text-slate-100 z-10">المحاضرات</h3>
-          <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
-            <span id="dynamic-lectures-text" class="text-[10px] text-emerald-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">محاضرات مجانية</span>
-          </div>
-        </button>
-
-        <!-- بطاقة ماركت المهني -->
-        <button onclick="switchTab('market')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="absolute -top-10 -left-10 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
-
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-400 to-pink-500 p-[1px] shadow-lg shadow-purple-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
-            <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-purple-400">
-              <i data-lucide="shopping-cart" class="w-6 h-6"></i>
-            </div>
-          </div>
-          
-          <h3 class="text-sm font-extrabold text-slate-100 z-10">ماركت المهني</h3>
-          <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
-            <span id="dynamic-market-text" class="text-[10px] text-purple-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">تسوق كتب</span>
-          </div>
-        </button>
-        
+      <!-- ==================== البطاقات الجديدة أسفل السلايدر ==================== -->
+<div class="grid grid-cols-2 gap-3 mt-6">
+  
+  <!-- بطاقة المحاضرات المجانية -->
+  <button onclick="switchTab('lectures')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+    
+    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[1px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+      <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-emerald-400">
+        <i data-lucide="monitor-play" class="w-6 h-6"></i>
       </div>
-      <!-- ==================================================================== -->
+    </div>
+    
+    <h3 class="text-sm font-extrabold text-slate-100 z-10">المحاضرات</h3>
+    <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
+      <span id="dynamic-lectures-text" class="text-[10px] text-emerald-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">محاضرات مجانية</span>
+    </div>
+  </button>
+
+  <!-- بطاقة ماركت المهني -->
+  <button onclick="switchTab('market')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    <div class="absolute -top-10 -left-10 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-400 to-pink-500 p-[1px] shadow-lg shadow-purple-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+      <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-purple-400">
+        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+      </div>
+    </div>
+    
+    <h3 class="text-sm font-extrabold text-slate-100 z-10">ماركت المهني</h3>
+    <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
+      <span id="dynamic-market-text" class="text-[10px] text-purple-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">تسوق كتب</span>
+    </div>
+  </button>
+
+  <!-- بطاقة الدردشة الصوتية (جديدة - تأخذ عرض العمودين) -->
+  <button onclick="window.open('https://3-2-silk.vercel.app/', '_blank')" class="col-span-2 group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+    <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-32 h-32 bg-sky-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+    <div class="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-400 to-blue-500 p-[1px] shadow-lg shadow-sky-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+      <!-- مؤشر النبض الأحمر (مباشر) -->
+      <div class="absolute -top-1 -right-1 flex h-3 w-3 z-20">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-slate-900"></span>
+      </div>
+      <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-sky-400">
+        <i data-lucide="mic" class="w-6 h-6"></i>
+      </div>
+    </div>
+    
+    <h3 class="text-sm font-extrabold text-slate-100 z-10">الدردشة الصوتية</h3>
+    <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
+      <span id="dynamic-voice-text" class="text-[10px] text-sky-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">غرف صوتية مباشرة</span>
+    </div>
+  </button>
+  
+</div>
+<!-- ==================================================================== -->
+
 
     </div>
 
@@ -327,7 +351,7 @@
       </button>
 
       <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
-        <iframe src="https://ssdddft.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
+        <iframe src="https://2-5-lake.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
       </div>
     </div>
 
