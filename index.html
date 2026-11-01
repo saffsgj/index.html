@@ -273,22 +273,19 @@
       <!-- ==================== البطاقات الجديدة أسفل السلايدر ==================== -->
       <div class="grid grid-cols-2 gap-3 mt-6">
         
-        <!-- بطاقة المحاضرات المجانية -->
-        <button onclick="switchTab('lectures')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+        <!-- بطاقة اعدادية اور -->
+        <a href="https://or-sage.vercel.app/" target="_blank" rel="noopener" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
           <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
-          
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[1px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
-            <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-emerald-400">
-              <i data-lucide="monitor-play" class="w-6 h-6"></i>
-            </div>
+
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[2px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+            <!-- غيّر رابط الصورة (src) إلى صورة الإعدادية -->
+            <img id="or-school-img" src="https://up6.cc/REPLACE_WITH_SCHOOL_IMAGE.jpg" alt="اعدادية اور" class="w-full h-full object-cover rounded-[14px] bg-slate-900" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230f172a%22/%3E%3Cpath d=%22M32 12 8 26h48z%22 fill=%22%2334d399%22/%3E%3Crect x=%2212%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2228%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2244%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%228%22 y=%2248%22 width=%2248%22 height=%226%22 fill=%22%2334d399%22/%3E%3C/svg%3E'">
           </div>
-          
-          <h3 class="text-sm font-extrabold text-slate-100 z-10">المحاضرات</h3>
-          <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
-            <span id="dynamic-lectures-text" class="text-[10px] text-emerald-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">محاضرات مجانية</span>
-          </div>
-        </button>
+
+          <h3 class="text-sm font-extrabold text-slate-100 z-10">اعدادية اور</h3>
+          <span class="text-[10px] text-emerald-400 font-bold z-10">اضغط للدخول</span>
+        </a>
 
         <!-- بطاقة ماركت المهني -->
         <button onclick="switchTab('market')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
@@ -1217,12 +1214,6 @@
       document.getElementById('dynamic-library-text'), 
       ['المكتبة', 'الأسئلة', 'الوزاريات', 'الكتب', 'الملازم'], 
       document.querySelector('#tab-books i')
-    );
-
-    // تفعيل حركة النص لبطاقة المحاضرات
-    createTextAnimator(
-      document.getElementById('dynamic-lectures-text'), 
-      ['محاضرات مجانية', 'أساتذة المهني', 'شروحات شاملة', 'دروس مكثفة']
     );
 
     // تفعيل حركة النص لبطاقة ماركت المهني
