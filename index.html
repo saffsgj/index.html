@@ -343,20 +343,22 @@
       <!-- ==================== البطاقات الجديدة أسفل السلايدر ==================== -->
       <div class="grid grid-cols-2 gap-3 mt-6">
         
-        <!-- بطاقة اعدادية اور -->
-        <a href="https://or-sage.vercel.app/" target="_blank" rel="noopener" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <!-- بطاقة النتائج والقبولات والاوائل (تفتح نفس صفحة الأقسام) -->
+        <button onclick="switchTab('sections')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[2px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
-            <!-- غيّر رابط الصورة (src) إلى صورة الإعدادية -->
-            <img id="or-school-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/REPLACE_WITH_SCHOOL_IMAGE.jpg" alt="اعدادية اور" class="w-full h-full object-cover rounded-[14px] bg-slate-900" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230f172a%22/%3E%3Cpath d=%22M32 12 8 26h48z%22 fill=%22%2334d399%22/%3E%3Crect x=%2212%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2228%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2244%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%228%22 y=%2248%22 width=%2248%22 height=%226%22 fill=%22%2334d399%22/%3E%3C/svg%3E'">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 p-[2px] shadow-lg shadow-amber-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+            <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-amber-400">
+              <i data-lucide="layout-grid" class="w-7 h-7"></i>
+            </div>
           </div>
 
-          <h3 class="text-sm font-extrabold text-slate-100 z-10">اعدادية اور</h3>
-          <span class="text-[10px] text-emerald-400 font-bold z-10">اضغط للدخول</span>
-        </a>
+          <h3 class="text-sm font-extrabold text-slate-100 z-10">النتائج والقبولات والاوائل</h3>
+          <span class="text-[10px] text-amber-400 font-bold z-10">اضغط للدخول</span>
+        </button>
 
+        
         <!-- بطاقة الكتب والملازم والمرشحات -->
         <a href="https://sites.google.com/view/ff7y/%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3-%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A" target="_blank" rel="noopener" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
           <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -371,8 +373,23 @@
           <h3 class="text-sm font-extrabold text-slate-100 z-10 text-center leading-snug">الكتب والملازم والمرشحات</h3>
           <span class="text-[10px] text-sky-400 font-bold z-10">اضغط للدخول</span>
         </a>
+
+        <!-- بطاقة اعدادية اور -->
+        <a href="https://or-sage.vercel.app/" target="_blank" rel="noopener" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[2px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+            <!-- غيّر رابط الصورة (src) إلى صورة الإعدادية -->
+            <img id="or-school-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/REPLACE_WITH_SCHOOL_IMAGE.jpg" alt="اعدادية اور" class="w-full h-full object-cover rounded-[14px] bg-slate-900" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230f172a%22/%3E%3Cpath d=%22M32 12 8 26h48z%22 fill=%22%2334d399%22/%3E%3Crect x=%2212%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2228%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2244%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%228%22 y=%2248%22 width=%2248%22 height=%226%22 fill=%22%2334d399%22/%3E%3C/svg%3E'">
+          </div>
+
+          <h3 class="text-sm font-extrabold text-slate-100 z-10">اعدادية اور</h3>
+          <span class="text-[10px] text-emerald-400 font-bold z-10">اضغط للدخول</span>
+        </a>
         
       </div>
+
       <!-- ==================================================================== -->
 
     </div>
@@ -386,7 +403,7 @@
       </button>
 
       <div class="flex-1 w-full h-full overflow-hidden bg-slate-900 relative">
-        <iframe src="https://dfrd.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
+        <iframe src="https://cordovan-engine-eight.vercel.app/" class="w-full h-full border-0 absolute inset-0" title="أقسام المنصة"></iframe>
       </div>
     </div>
 
