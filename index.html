@@ -99,6 +99,73 @@
       background: #334155;
       border-radius: 10px;
     }
+
+    /* ==================== انميشن تحميل الصور والايقونات ==================== */
+    @keyframes shimmerMove {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @keyframes imgReveal {
+      0%   { opacity: 0; filter: blur(14px) saturate(0.6); transform: scale(1.12); }
+      100% { opacity: 1; filter: blur(0) saturate(1); transform: scale(1); }
+    }
+    @keyframes iconPop {
+      0%   { opacity: 0; transform: scale(0.4) rotate(-12deg); }
+      60%  { opacity: 1; transform: scale(1.15) rotate(3deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
+    }
+    @keyframes spinRing {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmerMoveSpin {
+      0%   { background-position: 50% 50%, 200% 0; }
+      100% { background-position: 50% 50%, -200% 0; }
+    }
+    /* الصورة أثناء التحميل: دائرة تحميل دوّارة + خلفية لامعة */
+    img.smart-img:not(.is-loaded):not(.is-error) {
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Ccircle cx='25' cy='25' r='20' fill='none' stroke='%23334155' stroke-width='5'/%3E%3Ccircle cx='25' cy='25' r='20' fill='none' stroke='%23fbbf24' stroke-width='5' stroke-linecap='round' stroke-dasharray='40 200'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='0.8s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/svg%3E") center / 34% auto no-repeat,
+        linear-gradient(110deg, #0f172a 25%, #1e293b 45%, #334155 50%, #1e293b 55%, #0f172a 75%) 0 0 / 200% 100%;
+      animation: shimmerMoveSpin 1.4s linear infinite;
+      color: transparent;
+      font-size: 0;
+    }
+    /* ظهور الصورة بعد التحميل */
+    img.smart-img.is-loaded {
+      animation: imgReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* الايقونة قبل أن تتحول إلى SVG: مربع لامع */
+    i[data-lucide] {
+      display: inline-block;
+      border-radius: 8px;
+      background: linear-gradient(110deg, rgba(148,163,184,0.10) 25%, rgba(251,191,36,0.35) 50%, rgba(148,163,184,0.10) 75%);
+      background-size: 200% 100%;
+      animation: shimmerMove 1.2s linear infinite;
+    }
+    /* ظهور الايقونة بحركة ناعمة (specificity صفر حتى لا تتعارض مع حركات أخرى) */
+    :where(svg.lucide) {
+      animation: iconPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+
+
+    /* عداد الزيارات أثناء التحميل */
+    .counter-loading {
+      display: inline-block;
+      width: 30px;
+      height: 10px;
+      vertical-align: middle;
+      border-radius: 6px;
+      background: linear-gradient(110deg, rgba(251,191,36,0.12) 25%, rgba(251,191,36,0.55) 50%, rgba(251,191,36,0.12) 75%);
+      background-size: 200% 100%;
+      animation: shimmerMove 1.1s linear infinite;
+    }
+    .counter-loaded { animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; display: inline-block; }
+
+    @media (prefers-reduced-motion: reduce) {
+      img.smart-img.is-loaded, :where(svg.lucide) { animation: none; }
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 h-[100dvh] flex flex-col justify-between overflow-hidden selection:bg-amber-500 selection:text-slate-950 w-full relative">
@@ -153,7 +220,7 @@
       <div class="flex items-center gap-2">
         <div id="header-visitor-count" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 shadow-sm transition-all duration-300">
           <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span id="header-visitor-num" class="font-bold text-[11px] tracking-wide">...</span>
+          <span id="header-visitor-num" class="counter-loading font-bold text-[11px] tracking-wide"></span>
         </div>
 
         <button id="header-fullscreen-btn" onclick="toggleAppFullscreen()" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 transition-all active:scale-95 shadow-inner">
@@ -200,14 +267,17 @@
             <div class="flex items-center gap-4">
               <div class="relative shrink-0">
                 <div class="w-20 h-20 rounded-2xl p-[2px] bg-gradient-to-tr from-yellow-400 via-amber-500 to-orange-600 shadow-xl">
-                  <img src="https://up6.cc/2026/08/178670166237561.jpg" alt="صورة المدير" class="w-full h-full object-cover rounded-[14px]" />
+                  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/2026/08/178670166237561.jpg" alt="صورة المدير" class="w-full h-full object-cover rounded-[14px]" />
                 </div>
                 <div class="absolute -bottom-1 -left-1 bg-amber-500 text-slate-950 p-1 rounded-full shadow-lg text-[10px]">
                   <i data-lucide="check" class="w-3 h-3"></i>
                 </div>
               </div>
               <div class="flex-1 min-w-0">
-                <h2 class="text-base font-extrabold text-slate-100 leading-tight truncate">الأستاذ علي محمد </h2>
+                <div class="flex items-center gap-2 min-w-0">
+                  <h2 class="text-base font-extrabold text-slate-100 leading-tight truncate">الأستاذ علي محمد</h2>
+                  <span class="shrink-0 whitespace-nowrap inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">ابن المهني</span>
+                </div>
                 <p class="text-[11px] text-amber-400 font-medium mt-1">المؤسس والرائد للتعليم المهني</p>
                 <p class="text-[11px] text-slate-400 mt-2 line-clamp-2 leading-relaxed">"نعمل على بناء جيل متمكن علمياً ومهنياً لخدمة المجتمع وبناء المستقبل."</p>
               </div>
@@ -242,7 +312,7 @@
             <div class="flex items-center gap-4">
               <div class="relative shrink-0">
                 <div class="w-20 h-20 rounded-2xl p-[2px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 shadow-xl">
-                  <img src="https://up6.cc/2026/08/178670288484391.jpg" alt="صورة المطور" class="w-full h-full object-cover rounded-[14px]" />
+                  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/2026/08/178670288484391.jpg" alt="صورة المطور" class="w-full h-full object-cover rounded-[14px]" />
                 </div>
                 <div class="absolute -bottom-1 -left-1 bg-cyan-500 text-slate-950 p-1 rounded-full shadow-lg text-[10px]">
                   <i data-lucide="check" class="w-3 h-3"></i>
@@ -280,29 +350,27 @@
 
           <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[2px] shadow-lg shadow-emerald-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
             <!-- غيّر رابط الصورة (src) إلى صورة الإعدادية -->
-            <img id="or-school-img" src="https://up6.cc/REPLACE_WITH_SCHOOL_IMAGE.jpg" alt="اعدادية اور" class="w-full h-full object-cover rounded-[14px] bg-slate-900" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230f172a%22/%3E%3Cpath d=%22M32 12 8 26h48z%22 fill=%22%2334d399%22/%3E%3Crect x=%2212%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2228%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2244%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%228%22 y=%2248%22 width=%2248%22 height=%226%22 fill=%22%2334d399%22/%3E%3C/svg%3E'">
+            <img id="or-school-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/REPLACE_WITH_SCHOOL_IMAGE.jpg" alt="اعدادية اور" class="w-full h-full object-cover rounded-[14px] bg-slate-900" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230f172a%22/%3E%3Cpath d=%22M32 12 8 26h48z%22 fill=%22%2334d399%22/%3E%3Crect x=%2212%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2228%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%2244%22 y=%2230%22 width=%228%22 height=%2216%22 fill=%22%2314b8a6%22/%3E%3Crect x=%228%22 y=%2248%22 width=%2248%22 height=%226%22 fill=%22%2334d399%22/%3E%3C/svg%3E'">
           </div>
 
           <h3 class="text-sm font-extrabold text-slate-100 z-10">اعدادية اور</h3>
           <span class="text-[10px] text-emerald-400 font-bold z-10">اضغط للدخول</span>
         </a>
 
-        <!-- بطاقة ماركت المهني -->
-        <button onclick="switchTab('market')" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="absolute -top-10 -left-10 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <!-- بطاقة الكتب والملازم والمرشحات -->
+        <a href="https://sites.google.com/view/ff7y/%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3-%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A" target="_blank" rel="noopener" class="group relative flex flex-col items-center justify-center gap-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute -top-10 -left-10 w-24 h-24 bg-sky-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-400 to-pink-500 p-[1px] shadow-lg shadow-purple-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
-            <div class="w-full h-full bg-slate-900 rounded-[15px] flex items-center justify-center text-purple-400">
-              <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-500 p-[2px] shadow-lg shadow-sky-500/20 mb-1 z-10 group-hover:-translate-y-1 transition-transform">
+            <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-sky-400">
+              <i data-lucide="library" class="w-7 h-7"></i>
             </div>
           </div>
-          
-          <h3 class="text-sm font-extrabold text-slate-100 z-10">ماركت المهني</h3>
-          <div class="h-4 overflow-hidden relative w-full text-center z-10 mt-0.5">
-            <span id="dynamic-market-text" class="text-[10px] text-purple-400 font-bold block transition-all duration-300 transform translate-y-0 opacity-100 w-full text-center">تسوق كتب</span>
-          </div>
-        </button>
+
+          <h3 class="text-sm font-extrabold text-slate-100 z-10 text-center leading-snug">الكتب والملازم والمرشحات</h3>
+          <span class="text-[10px] text-sky-400 font-bold z-10">اضغط للدخول</span>
+        </a>
         
       </div>
       <!-- ==================================================================== -->
@@ -454,7 +522,7 @@
           </div>
         </div>
         <div class="px-3 py-1 rounded-xl bg-slate-950 border border-amber-500/40 text-amber-300 text-xs font-black font-mono shadow-inner" style="direction: ltr;">
-          <span id="sidebar-visitor-num">...</span>
+          <span id="sidebar-visitor-num" class="counter-loading"></span>
         </div>
       </div>
 
@@ -518,7 +586,7 @@
     <div class="p-4 border-t border-slate-800/80 bg-slate-950/60 space-y-3">
       <div onclick="openDirectorModal(); closeMenu();" class="p-2.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-slate-900 border border-amber-500/25 flex items-center gap-3 shadow-md cursor-pointer hover:border-amber-500/50 transition">
         <div class="relative shrink-0">
-          <img src="https://up6.cc/2026/08/178670166237561.jpg" alt="مدير المنصة" class="w-9 h-9 rounded-xl object-cover border border-amber-400/50 shadow">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/2026/08/178670166237561.jpg" alt="مدير المنصة" class="w-9 h-9 rounded-xl object-cover border border-amber-400/50 shadow">
           <span class="absolute -top-1.5 -right-1.5 text-[11px]">👑</span>
         </div>
         <div class="min-w-0 flex-1">
@@ -529,7 +597,7 @@
 
       <div onclick="openDevModal(); closeMenu();" class="flex items-center justify-between text-[11px] text-slate-400 pt-1 px-1 border-t border-slate-800/60 cursor-pointer hover:text-slate-200 transition">
         <div class="flex items-center gap-2">
-          <img src="https://up6.cc/2026/08/178670288484391.jpg" alt="المطور" class="w-6 h-6 rounded-full object-cover border border-cyan-500/40">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/2026/08/178670288484391.jpg" alt="المطور" class="w-6 h-6 rounded-full object-cover border border-cyan-500/40">
           <span class="text-[10px] text-slate-400">برمجة <strong class="text-cyan-400 font-bold">م. سجاد علي</strong></span>
         </div>
         <span class="text-[10px] text-slate-500 font-medium">© 2026</span>
@@ -606,7 +674,7 @@
 
       <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
         <div class="flex items-center gap-3">
-          <img src="https://up6.cc/2026/08/178670166237561.jpg" class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-400/80 shadow-lg shadow-amber-500/20" alt="المدير">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/2026/08/178670166237561.jpg" class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-400/80 shadow-lg shadow-amber-500/20" alt="المدير">
           <div>
             <h3 class="text-base font-extrabold text-slate-100 flex items-center gap-1.5">الأستاذ علي محمد 👑</h3>
             <p class="text-xs text-amber-400 font-bold">مدير منصة منقذ المهني</p>
@@ -677,7 +745,7 @@
 
       <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
         <div class="flex items-center gap-3">
-          <img src="https://up6.cc/2026/08/178670288484391.jpg" class="w-12 h-12 rounded-2xl object-cover border-2 border-cyan-400/80 shadow-lg shadow-cyan-500/20" alt="المطور">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://up6.cc/2026/08/178670288484391.jpg" class="w-12 h-12 rounded-2xl object-cover border-2 border-cyan-400/80 shadow-lg shadow-cyan-500/20" alt="المطور">
           <div>
             <h3 class="text-base font-extrabold text-slate-100 flex items-center gap-1.5">المهندس سجاد علي 💻</h3>
             <p class="text-xs text-cyan-400 font-bold">مطور البرمجيات والمنصة</p>
@@ -733,6 +801,44 @@
   <!-- ==================== 7. السكربتات والبرمجيات العامة ==================== -->
   <script>
     lucide.createIcons();
+
+    /* ----- انميشن تحميل الصور (يظهر التحميل فعلياً حتى تكتمل الصورة) ----- */
+    (function initSmartImages() {
+      const MIN_LOADING_MS = 900; // أقل مدة يظهر فيها انميشن التحميل
+      const startTime = Date.now();
+
+      document.querySelectorAll('img[data-src]').forEach((img) => {
+        const realSrc = img.getAttribute('data-src');
+        img.classList.add('smart-img');
+
+        // عند تحميل الصورة الحقيقية داخل العنصر نفسه: أظهرها بالحركة
+        img.addEventListener('load', () => {
+          if (img.dataset.ready === '1') {
+            img.classList.remove('is-error');
+            img.classList.add('is-loaded');
+          }
+        });
+        img.addEventListener('error', () => {
+          if (img.dataset.ready === '1' && !img.classList.contains('is-loaded')) {
+            img.classList.add('is-error');
+          }
+        });
+
+        const reveal = () => {
+          const wait = Math.max(0, MIN_LOADING_MS - (Date.now() - startTime));
+          setTimeout(() => {
+            img.dataset.ready = '1';
+            img.src = realSrc;
+          }, wait);
+        };
+
+        // تحميل مسبق؛ إذا لم يكتمل التحميل يبقى انميشن التحميل ظاهراً
+        const pre = new Image();
+        pre.onload = reveal;
+        pre.onerror = reveal; // عند الفشل يعمل بديل الصورة (onerror) إن وجد
+        pre.src = realSrc;
+      });
+    })();
 
     /* ----- منطق نافذة الترحيب التلقائية عند الفتح مع History API ----- */
     window.addEventListener('DOMContentLoaded', () => {
@@ -810,12 +916,13 @@
         if (error) {
           console.warn("خطأ في تحديث العداد:", error);
         }
-      });
+      }, false); // false: لا يعرض قيمة مؤقتة محلية، فقط القيمة الحقيقية من السيرفر
 
       // الاستماع المباشر للتغيرات وعرض القيمة الحقيقية
       visitsRef.on('value', (snapshot) => {
-        const totalVisits = snapshot.val() || 1;
-        updateVisitorDisplays(totalVisits);
+        // إذا لم تصل قيمة حقيقية بعد، يبقى انميشن التحميل ظاهراً
+        if (!snapshot.exists()) return;
+        updateVisitorDisplays(snapshot.val());
       }, (error) => {
         console.warn("خطأ قراءة البيانات من فايربيس:", error);
       });
@@ -841,8 +948,13 @@
       const headerNum = document.getElementById('header-visitor-num');
       const sidebarNum = document.getElementById('sidebar-visitor-num');
       
-      if (headerNum) headerNum.textContent = formatted;
-      if (sidebarNum) sidebarNum.textContent = formatted;
+      [headerNum, sidebarNum].forEach((el) => {
+        if (!el) return;
+        const wasLoading = el.classList.contains('counter-loading');
+        el.textContent = formatted;
+        el.classList.remove('counter-loading');
+        if (wasLoading) el.classList.add('counter-loaded');
+      });
     }
 
     /* ----- منطق فحص قوة واتصال الإنترنت ----- */
@@ -1214,12 +1326,6 @@
       document.getElementById('dynamic-library-text'), 
       ['المكتبة', 'الأسئلة', 'الوزاريات', 'الكتب', 'الملازم'], 
       document.querySelector('#tab-books i')
-    );
-
-    // تفعيل حركة النص لبطاقة ماركت المهني
-    createTextAnimator(
-      document.getElementById('dynamic-market-text'), 
-      ['تسوق كتب', 'ملازم دراسية', 'بكجات الملازم', 'أدوات الرسم']
     );
 
   </script>
