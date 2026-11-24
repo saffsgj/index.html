@@ -30,7 +30,18 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
+  <script>
+    /* الانترو يظهر مرة واحدة لكل جلسة (أو إذا مرّت أقل من 10 دقائق على آخر ظهور) — حتى لا يتكرر عند الرجوع من موقع خارجي */
+    (function () {
+      try {
+        var seen = sessionStorage.getItem('intro_seen') === '1';
+        var ts = parseInt(localStorage.getItem('intro_ts') || '0', 10);
+        if (seen || (Date.now() - ts) < 600000) document.documentElement.classList.add('skip-intro');
+      } catch (e) {}
+    })();
+  </script>
   <style>
+    .skip-intro #intro-overlay { display: none !important; }
     /* حل مشكلة الوميض (الرمش) في الايفونات عند اللمس */
     * {
       -webkit-tap-highlight-color: transparent;
@@ -295,6 +306,8 @@
   <script>
     (function () {
       var ov = document.getElementById('intro-overlay'), done = false;
+      if (document.documentElement.classList.contains('skip-intro')) { ov.remove(); window.__introDone = true; return; }
+      try { sessionStorage.setItem('intro_seen', '1'); localStorage.setItem('intro_ts', String(Date.now())); } catch (e) {}
       function finish() {
         if (done) return; done = true;
         ov.classList.add('intro-out');
@@ -865,6 +878,11 @@
     window.addEventListener('DOMContentLoaded', () => {
       // تعيين الحالة المبدئية لـ History API للتنقل بزر الرجوع (دائماً الرئيسية عند فتح التطبيق)
       history.replaceState({ tab: 'home' }, '', window.location.pathname);
+      // بعد الرجوع من موقع خارجي: افتح آخر صفحة كنت فيها بدل الرجوع للبداية
+      try {
+        var lastTab = sessionStorage.getItem('last_tab');
+        if (lastTab && lastTab !== 'home' && document.getElementById('page-' + lastTab)) switchTab(lastTab);
+      } catch (e) {}
     });
 
     // مراقبة ضغط المستخدم على زر الرجوع الفعلي في هاتفه
@@ -1386,6 +1404,7 @@
       }
 
       currentActiveTab = tabKey;
+      try { sessionStorage.setItem('last_tab', tabKey); } catch (e) {}
       document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
       
       const targetPage = document.getElementById(`page-${tabKey}`);
