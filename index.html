@@ -474,11 +474,72 @@
           <span class="text-[10px] text-sky-400 font-bold z-10">اضغط للدخول</span>
         </a>
 
+        <!-- بطاقة موقع المديريات (تفتح صفحة المديريات) -->
+        <button onclick="switchTab('directorates')" class="group relative col-span-2 flex items-center gap-4 p-4 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden active:scale-[0.98] transition-all duration-300 text-right">
+          <div class="absolute inset-0 bg-gradient-to-l from-emerald-500/10 via-transparent to-teal-500/5 opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute -bottom-12 -left-10 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 p-[2px] shadow-lg shadow-emerald-500/20 z-10 group-hover:-translate-y-0.5 transition-transform">
+            <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-emerald-400">
+              <i data-lucide="landmark" class="w-7 h-7"></i>
+            </div>
+          </div>
+
+          <div class="relative flex-1 min-w-0 z-10">
+            <h3 class="text-[15px] font-black text-slate-50 leading-snug">مواقع المديريات</h3>
+            <p class="mt-0.5 text-[11px] text-slate-400 leading-relaxed">بوابتك إلى المواقع الرسمية لمديريات التعليم المهني في المحافظات</p>
+          </div>
+
+          <div class="relative shrink-0 z-10 flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-extrabold group-hover:bg-emerald-500/20 transition-colors">
+            <span>تصفح</span><i data-lucide="chevron-left" class="w-4 h-4"></i>
+          </div>
+        </button>
+
         
       </div>
 
       <!-- ==================================================================== -->
 
+    </div>
+
+    <!-- ---------- صفحة مواقع المديريات ---------- -->
+    <div id="page-directorates" class="page-section hidden w-full flex-1 min-h-0 bg-slate-900 overflow-y-auto px-4 pt-5 pb-10">
+      <div class="max-w-md mx-auto self-start">
+
+        <!-- العنوان العلوي -->
+        <div class="relative text-center mb-7 pt-2">
+          <div class="absolute left-1/2 -top-6 -translate-x-1/2 w-44 h-44 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-400 via-teal-400 to-amber-300 p-[2px] shadow-xl shadow-emerald-500/20 mb-3">
+            <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-emerald-400">
+              <i data-lucide="landmark" class="w-8 h-8"></i>
+            </div>
+          </div>
+          <h2 class="relative text-xl font-black bg-gradient-to-r from-emerald-200 via-emerald-400 to-teal-300 bg-clip-text text-transparent">المديريات</h2>
+          <p class="relative mt-1 text-xs text-slate-400 leading-relaxed">اختر المديرية للانتقال إلى موقعها الرسمي</p>
+          <div class="relative mx-auto mt-4 h-[2px] w-24 rounded-full bg-gradient-to-r from-transparent via-emerald-500/70 to-transparent"></div>
+        </div>
+
+        <!-- بطاقة مديرية واسط (أفقية) -->
+        <a href="https://mihniwasit.vercel.app/" target="_blank" rel="noopener" class="group relative flex items-center gap-4 p-4 rounded-3xl bg-gradient-to-l from-slate-900 via-slate-900 to-slate-800/80 border border-slate-700/70 hover:border-emerald-500/50 shadow-xl shadow-black/30 overflow-hidden active:scale-[0.98] transition-all duration-300">
+          <div class="absolute top-0 bottom-0 right-0 w-1 bg-gradient-to-b from-emerald-400 to-teal-500"></div>
+          <div class="absolute -bottom-10 -left-8 w-28 h-28 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative shrink-0 w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
+            <i data-lucide="building-2" class="w-7 h-7"></i>
+          </div>
+
+          <div class="relative flex-1 min-w-0">
+            <span class="inline-block mb-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-[9px] font-bold text-amber-400">الموقع الرسمي</span>
+            <h3 class="text-sm font-black text-slate-50 leading-snug">مديرية تربية التعليم المهني</h3>
+            <p class="text-xs font-bold text-emerald-400 mt-0.5">واسط</p>
+          </div>
+
+          <div class="relative shrink-0 w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 group-hover:bg-emerald-500/15 group-hover:text-emerald-400 group-hover:border-emerald-500/40 transition-colors">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </div>
+        </a>
+
+      </div>
     </div>
 
     <!-- ---------- 2. صفحة الأقسام ---------- -->
@@ -1355,6 +1416,7 @@
       sections: { name: 'أقسام المنصة', subtitle: 'تصفح جميع الأقسام' },
       achievements: { name: 'الإنجازات', subtitle: 'أبرز إنجازات التعليم المهني' },
       news: { name: 'الأخبار', subtitle: 'آخر المستجدات والتبليغات' },
+      directorates: { name: 'مواقع المديريات', subtitle: 'المواقع الرسمية' },
       lectures: { name: 'المحاضرات المجانية', subtitle: 'شروحات شاملة' }
     };
 
